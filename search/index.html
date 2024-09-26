@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   
-  <title>Furry Monster的博客</title>
+  <title>Search - Furry Monster的博客</title>
   
     <link rel="shortcut icon" href="/favicon.png">
   
@@ -16,11 +16,11 @@
   
   
   
-  <meta property="og:title" content="Furry Monster的博客" />
+  <meta property="og:title" content="Search - Furry Monster的博客" />
   
   <meta property="og:type" content="website" />
   
-  <meta property="og:url" content="http://furry-monster.github.io/index.html" />
+  <meta property="og:url" content="http://furry-monster.github.io/search/index.html" />
   
   <meta property="og:image" content="/favicon.png" />
   
@@ -66,11 +66,19 @@
   
   
   
-<link rel="stylesheet" href="/css/index.css">
+  
+<link rel="stylesheet" href="/css/post.css">
 
   
   
   
+<link rel="stylesheet" href="/css/archive.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/search.css">
+
   
   
   
@@ -95,6 +103,8 @@
         data-toc="true"
         data-toc-max-depth="2"
         
+        
+        data-search-path="search.json"
         
     >
         <nav id="theme-nav">
@@ -147,44 +157,19 @@
         </div>
     </div>
 </nav>
-        <div class="container">
-    
-    <div class="hero">
-        <div class="group">
-            <h2 class="sub"></h2>
-            <h2 class="large">Talk is cheap, show me the code.</h2>
-        </div>
-    </div>
-
-    <h2 class="section-title">Latest Posts</h2>
-    
-
-    <div class="post-list">
         
-        <article class="post-list-item">
-            <a href="/2024/09/26/hello-world/">
-                
-                <div class="content">
-                    
-                    <div class="title">
-                        Hello World
-                    </div>
-                    
-                    
-                    <div class="time">
-                        <span>September</span>
-                        <span>&nbsp;26,&nbsp;</span>
-                        <span>2024</span>
-                    </div>
-                    
-                </div>
-            </a>
-        </article>
-        
+    <div class="container">
+    <div class="meta">
+        <h2 class="title">
+            Search
+        </h2>
     </div>
-
-    
+    <form id="search-form">
+        <input type="text" id="searchbox" placeholder="Type to search...">
+    </form>
+    <div class="post-list archives" id="search-results"></div>
 </div>
+
         <footer>
     <div class="inner">
         <div class="links">
@@ -268,6 +253,10 @@
 
         
 <script src="/js/main.js"></script>
+
+        
+        
+<script src="/js/search.js"></script>
 
         
         
