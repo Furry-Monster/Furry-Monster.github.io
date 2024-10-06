@@ -171,7 +171,7 @@
 
     <div class="content">
         <h1 id="发源"><a href="#发源" class="headerlink" title="发源"></a>发源</h1><p>Tree-shaking 这一术语在前端社区内，起初是 <a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=a9sEtaJrGvQZLMaXxUSlXQ==.iGjYfWsubiyid367c3gVzcd57dVW35aQSB0Bz5u5wZI=" title="Rich Harris">Rich Harris</a> 在 Rollup 中提出。简单概括起来，Tree-shaking 可以使得项目最终构建（Bundle）结果中只包含你实际需要的代码。</p>
-<p><img src="/image/TreeShaking%E6%8A%80%E6%9C%AF%E6%B3%9B%E8%B0%88/1728224067106.png" alt="1728224067106"></p>
+<p><img src="https://segmentfault.com/img/remote/1460000040476981" alt="1728224067106"></p>
 <p>而且，说到 Tree-shaking，不难免提及 Dead Code Elimination，相信很多同学在一些关于 Tree-shaking 的文章中都会看到诸如这样的描述：Tree-shaking 是一项 Dead Code Elimination（以下统称 DCE）技术。</p>
 <p>那么，既然有了 DCE 这一术语，为什么又要造一个 Tree-shaking 术语？存在既有价值，下面，让我们一起来看看 Rich Harris 是如何回答这个问题的</p>
 <h1 id="1-DCE-vs-Tree-Shaking"><a href="#1-DCE-vs-Tree-Shaking" class="headerlink" title="1. DCE vs. Tree-Shaking"></a>1. DCE vs. Tree-Shaking</h1><p>在当时 Rich Haris 针对这一提问专门写了这篇文章<a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=Vlfq3PO2dcK/NJzTbd/a7w==.wxtSXtOWIByS4OQ4lowXE2PH8cml/PzyV3WWck18zT9rTwLg8EejE+QAWFkLGwzqc3ImYA9Y+vTUH7fELHwbugFRGeLbv4BC47Tbowb24rsHctDa6S9ibe1KlWlzMKaU" title="《Tree-shaking versus dead code elimination》">《Tree-shaking versus dead code elimination》</a>，文中表示 DCE 和 Tree-shaking 最终的目标是一致的（更少的代码），但是它们仍然是存在区别的。</p>
@@ -182,7 +182,7 @@
 <p>I thought about using the ‘live code inclusion’ phrase with Rollup, but it seemed that I’d just be adding even more confusion seeing as tree-shaking is an existing concept. Maybe that was the wrong decision?</p>
 </blockquote>
 <p>所以，我想到这里同学们应该清楚一点，Tree-shaking 和 DCE 只是最终的结果 <strong>是一致的</strong> ，但是 2 者 <strong>实现的过程不同</strong> ，Tree-shaking 是保留 Live Code，而 DCE 是消除 Dead Code。</p>
-<p>并且，当时 Rich Harris 也指出 Rollup 也不是完美的，最好的结果是使用 Rollup + Uglify 的方式。不过，显然现在的 Rollup <code>v2.55.1</code> 已经臻至完美。那么，接下来让我们沿着时间线看看 Tree-shaking 的演变.</p>
+<p>并且，当时 Rich Harris 也指出 Rollup 也不是完美的，最好的结果是使用 Rollup + Uglify 的方式。不过，显然现在的 Rollup <code>v2.55.1</code> 已经臻至完美。那么，接下来让我们沿着时间线看看 Tree-shaking 的演变</p>
 <h1 id="2-Tree-Shaking的演化"><a href="#2-Tree-Shaking的演化" class="headerlink" title="2.Tree-Shaking的演化"></a>2.Tree-Shaking的演化</h1><p>Tree-shaking  <strong>在最初被提出的时候它只会做一件事</strong> ，那就是利用 ES Module 静态导入的特点来检测模块内容的导出、导入以及被使用的情况，从而实现保留 Live Code 的目的。</p>
 <p>也许这个时候你会问 Tree-shaking 不是还会消除 Dead Code 吗？确实，但是也不一定，如果你使用的是现在的 Rollup <code>v2.55.1</code>，它是会进行 DCE，即消除 Dead Code。但是，如果你用的是 Webpack 的话，那就是另一番情况了，它需要使用 Uglify 对应的插件来实现 DCE。</p>
 <p>下面，我们以 Rollup 为例，聊聊过去和现在的 Tree-shaking。</p>
