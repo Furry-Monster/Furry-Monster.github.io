@@ -180,14 +180,14 @@
 <p>Node.js是一个基于Chrome V8引擎的JavaScript运行环境。Node.js使用了一个事件驱动的、非阻塞式I&#x2F;O的模型，轻量又高效，它的底层是用C&#x2F;C++编写的。这是Node.js的官方描述，对前端开发人员来说，想要搞清楚其中所包含的“引擎”“运行环境”“事件驱动”以及“非阻塞I&#x2F;O模型”到底是什么意思，并不是一件容易的事情。</p>
 </blockquote>
 <p>要理解这段话和它背后的真正力量，我们需要把 Node.js 拆分到组件，了解它们的关键技术，如何交互协作，最终构成了 Node.js 这个强大的运行时环境：</p>
-<p><img src="https://i.sstatic.net/u1O2O.png" alt="nodejs"></p>
+<p><img src="/image/Vue%E9%87%8D%E5%AD%A6%E8%AE%A1%E5%88%92%EF%BC%88%E4%BA%8C%EF%BC%89/1728313069799.png" alt="1728313069799"></p>
 <p>它们是这样分工的：</p>
 <p><a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=MWhl/932Qfdc/d2nsfxM1w==.NpNMHIW68G85VeQTb2pVJYVR+76WIEx4lEh2iauvIsrUz+/QFq16aEfCNhrue2eu"><strong>V8</strong></a>：Google 开源的高性能 JavaScript 引擎，以 C++ 实现。这也是集成在 Chrome 中的 JS 引擎。V8 将你写的 JavaScript 代码编译为机器码（所以它超级快）然后执行。V8 有多快？看看<a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=85Hko9+RFa/PHvH6byDwBg==.cvVPo/vph0VGeFW2VswA+LxNCktK7Rs69h3hS0IjKjzHa7xF+RQ2u1dxAgOXmxC2">这个爆栈网的回答</a>。</p>
 <p><a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=slfyaTN7z1+COe+yH761uA==.WOb9nQmmJohdgx6Sj2+LjedEKBU+KTZqdgaxqcdjcKc="><strong>libuv</strong></a>：提供异步功能的 C 库。它在运行时负责一个事件循环（Event Loop）、一个线程池、文件系统 I&#x2F;O、DNS 相关和网络 I&#x2F;O，以及一些其他重要功能。</p>
 <p><a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=0kBZVWiXq2aOlCa2R4T2Tg==.ky0ULR0KXFBIyFMKIQLnkfFTMPcH6si7zNLwBBml15NTXk94ayOUxHV2TAZiiv8Q3ZDrF2NsFdlAnRw/KuIThQ=="><strong>其他 C&#x2F;C++ 组件和库</strong></a>：如 <a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=ljzvhrP4oxpKXqGuB/MTjw==.H+P8XnrlZDjyC6sXDHad1ZFmHLFY5QwnrzTo7VqIYEU=">c-ares</a>、<a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=sLZtgHX0oRJ1mjoA3g31Hw==.+/rNH9/qMc1MEj5sYCc3awBrN0yDxe8rrFUMJsGdHjM=">crypto (OpenSSL)</a>、<a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=wFIzBKRhoLqtd9Wy8NbsNQ==.B5uJaDqo+F29QTGd3xRroOEm5kD2rEHnA4IfrVypsjt9jjWQ/qCbOs8j8M59bqUN">http-parser</a> 以及 <a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=jh8FDMyJypJAtJdXiD5iWQ==.A5hQTM/Gaw5zRWE1dJQntOYG9A+NCTkCPz1W2YfPzSc=">zlib</a>。这些依赖提供了对系统底层功能的访问，包括网络、压缩、加密等。</p>
 <h2 id="架构方面的热门讨论"><a href="#架构方面的热门讨论" class="headerlink" title="架构方面的热门讨论"></a>架构方面的热门讨论</h2><p>在Stack Overflow上，关于这个架构有一个热门的讨论<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/36766696/which-is-correct-node-js-architecture/37512766#37512766">javascript - Which is correct Node.js architecture? - Stack Overflow</a></p>
 <p>Aren Li是这么认为的：</p>
-<p><img src="https://i.sstatic.net/QRePV.jpg" alt="nodejs1"></p>
+<p><img src="/image/Vue%E9%87%8D%E5%AD%A6%E8%AE%A1%E5%88%92%EF%BC%88%E4%BA%8C%EF%BC%89/1728313120917.png" alt="1728313120917"></p>
 <p>原文在此：<a target="_blank" rel="noopener" href="https://medium.com/yet-another-node-js-blog/architecture-of-node-js-internal-codebase-57cd8376b71f">Architecture of Node.js’ Internal Codebase | by Aren Yanqi Li | Yet Another Node.js Blog | Medium</a></p>
 <h1 id="Vite项目架构重点解读"><a href="#Vite项目架构重点解读" class="headerlink" title="Vite项目架构重点解读"></a>Vite项目架构重点解读</h1><h2 id="源码类文件"><a href="#源码类文件" class="headerlink" title="源码类文件"></a>源码类文件</h2><p>public 下面的不会被编译 可以存放静态资源</p>
 <p>assets 下面可以存放可编译的静态资源</p>
@@ -217,8 +217,6 @@
 <p>3.再找不到 去环境变量去找</p>
 <p>至于node_modules&#x2F;.bin中的三个文件：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># unix Linux macOS 系默认的可执行文件，必须输入完整文件名</span></span><br><span class="line">vite</span><br><span class="line"> </span><br><span class="line"><span class="comment"># windows cmd 中默认的可执行文件，当我们不添加后缀名时，自动根据 pathext 查找文件</span></span><br><span class="line">vite.cmd</span><br><span class="line"> </span><br><span class="line"><span class="comment"># Windows PowerShell 中可执行文件，可以跨平台</span></span><br><span class="line">vite.psl</span><br></pre></td></tr></table></figure>
-
-
 
 <p>我们使用<strong>windows</strong> 一般执行的是第二个，而MacOS Linux 一般是第一个。</p>
 <p>详情可以参考：<a target="_blank" rel="noopener" href="https://xiaoman.blog.csdn.net/article/details/122771007">学习Vue3 第三章（Vite目录 &amp; Vue单文件组件 &amp; npm run dev 详解）_npm run dev vite-CSDN博客</a></p>

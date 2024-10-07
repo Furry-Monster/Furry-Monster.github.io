@@ -171,7 +171,7 @@
 
     <div class="content">
         <h1 id="发源"><a href="#发源" class="headerlink" title="发源"></a>发源</h1><p>Tree-shaking 这一术语在前端社区内，起初是 <a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=a9sEtaJrGvQZLMaXxUSlXQ==.iGjYfWsubiyid367c3gVzcd57dVW35aQSB0Bz5u5wZI=" title="Rich Harris">Rich Harris</a> 在 Rollup 中提出。简单概括起来，Tree-shaking 可以使得项目最终构建（Bundle）结果中只包含你实际需要的代码。</p>
-<p><img src="https://segmentfault.com/img/remote/1460000040476981" alt="1728224067106"></p>
+<p><img src="/image/TreeShaking%E6%8A%80%E6%9C%AF%E6%B3%9B%E8%B0%88/1728313255298.png" alt="1728313255298"></p>
 <p>而且，说到 Tree-shaking，不难免提及 Dead Code Elimination，相信很多同学在一些关于 Tree-shaking 的文章中都会看到诸如这样的描述：Tree-shaking 是一项 Dead Code Elimination（以下统称 DCE）技术。</p>
 <p>那么，既然有了 DCE 这一术语，为什么又要造一个 Tree-shaking 术语？存在既有价值，下面，让我们一起来看看 Rich Harris 是如何回答这个问题的</p>
 <h1 id="1-DCE-vs-Tree-Shaking"><a href="#1-DCE-vs-Tree-Shaking" class="headerlink" title="1. DCE vs. Tree-Shaking"></a>1. DCE vs. Tree-Shaking</h1><p>在当时 Rich Haris 针对这一提问专门写了这篇文章<a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=Vlfq3PO2dcK/NJzTbd/a7w==.wxtSXtOWIByS4OQ4lowXE2PH8cml/PzyV3WWck18zT9rTwLg8EejE+QAWFkLGwzqc3ImYA9Y+vTUH7fELHwbugFRGeLbv4BC47Tbowb24rsHctDa6S9ibe1KlWlzMKaU" title="《Tree-shaking versus dead code elimination》">《Tree-shaking versus dead code elimination》</a>，文中表示 DCE 和 Tree-shaking 最终的目标是一致的（更少的代码），但是它们仍然是存在区别的。</p>
@@ -188,7 +188,7 @@
 <p>下面，我们以 Rollup 为例，聊聊过去和现在的 Tree-shaking。</p>
 <h3 id="2-1过去的-Tree-shaking"><a href="#2-1过去的-Tree-shaking" class="headerlink" title="2.1过去的 Tree-shaking"></a>2.1过去的 Tree-shaking</h3><p>在早期， Rollup 提出和支持 Tree-shaking 的时候，它并不会做额外的 DCE，这也可以在 15 年 Rich Haris 写的那篇文章中看出，当时他也提倡大家使用 Rollup + Uglify。所以，这里让我们一起把<strong>时间倒回</strong> Rollup <code>v0.10.0</code> 的 Tree-shaking。</p>
 <p>回到 Rollup <code>v0.10.0</code> 版本，你会发现非常有趣的一点，就是它的 GitHub README 介绍是这样的：</p>
-<p><img src="https://segmentfault.com/img/remote/1460000040476982"></p>
+<p><img src="/image/TreeShaking%E6%8A%80%E6%9C%AF%E6%B3%9B%E8%B0%88/1728313265262.png" alt="1728313265262"></p>
 <p>Rollup 的命名来源于一首名为《Roll up》的说唱歌曲，我想这应该出乎了很多同学的意料。不过话说 Evan You 也喜欢说唱，然后我（你）也喜欢说唱，所以这也许可以论证我（你）选择前端似乎没错？这里附上这首歌，你可以选择听这首歌来拉近 Rollup 的距离。</p>
 <blockquote>
 <p>传送门：<a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=fq6Q+XC+/UwjejTNfN6YbQ==.CFK9bUF4j6I2V6mZzFW1brk7xofDUyNFlAuHxIPwr/1psgQNEMZ765uhLFbJM1eS">https://www.youtube.com/watch...</a></p>
