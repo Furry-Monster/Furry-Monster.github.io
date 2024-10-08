@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   
-  <title>Furry Monster的博客</title>
+  <title>聊聊Vue的diff算法 - Furry Monster的博客</title>
   
     <link rel="shortcut icon" href="/favicon.png">
   
@@ -16,13 +16,17 @@
   
   
   
-  <meta property="og:title" content="Furry Monster的博客" />
+  <meta property="og:title" content="聊聊Vue的diff算法 - Furry Monster的博客" />
   
-  <meta property="og:type" content="website" />
+  <meta property="og:type" content="article" />
   
-  <meta property="og:url" content="http://furry-monster.github.io/index.html" />
+  <meta property="og:url" content="http://furry-monster.github.io/2024/10/08/%E8%81%8A%E8%81%8AVue%E7%9A%84diff%E7%AE%97%E6%B3%95/index.html" />
   
   <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2024-10-08T05:43:14.000Z" />
+  
+  <meta property="og:article:author" content="FurryMonster" />
   
   
 
@@ -66,9 +70,9 @@
   
   
   
-<link rel="stylesheet" href="/css/index.css">
-
   
+<link rel="stylesheet" href="/css/post.css">
+
   
   
   
@@ -147,124 +151,66 @@
         </div>
     </div>
 </nav>
-        <div class="container">
-    
-    <div class="hero">
-        <div class="group">
-            <h2 class="sub"></h2>
-            <h2 class="large">Talk is cheap, show me the code.</h2>
+        
+<article class="post">
+    <div class="meta">
+        
+
+        
+        <div class="date" id="date">
+            <span>October</span>
+            <span>8,</span>
+            <span>2024</span>
         </div>
+        
+
+        <h1 class="title">聊聊Vue的diff算法</h1>
     </div>
 
-    <h2 class="section-title">Latest Posts</h2>
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>相比大家早早听说过了虚拟DOM的存在，Diff算法的运用是虚拟DOM具有高性能的一个重要原因。</p>
+<h1 id="虚拟DOM"><a href="#虚拟DOM" class="headerlink" title="虚拟DOM"></a>虚拟DOM</h1><p>Vue的虚拟DOM实质上就是生成一个AST（抽象语法树Abstract Syntax Tree）<br><img src="/.io//09/26/hello-Stranger/28367780958.png" alt="1728367780958"></p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by FurryMonster, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/前端/" class="tag">#前端</a>
+        </p>
+        
+    </div>
     
 
-    <div class="post-list">
+    <div class="container post-prev-next">
+        <a class="next"></a>
         
-        <article class="post-list-item">
-            <a href="/2024/10/08/%E8%81%8A%E8%81%8AVue%E7%9A%84diff%E7%AE%97%E6%B3%95/">
-                
-                <div class="content">
-                    
-                    <div class="title">
-                        聊聊Vue的diff算法
-                    </div>
-                    
-                    
-                    <div class="time">
-                        <span>October</span>
-                        <span>&nbsp;8,&nbsp;</span>
-                        <span>2024</span>
-                    </div>
-                    
+        <a href="/2024/10/07/Vue%E9%87%8D%E5%AD%A6%E8%AE%A1%E5%88%92%EF%BC%88%E4%BA%8C%EF%BC%89/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">Vue重学计划（二）</>
                 </div>
-            </a>
-        </article>
-        
-        <article class="post-list-item">
-            <a href="/2024/10/07/Vue%E9%87%8D%E5%AD%A6%E8%AE%A1%E5%88%92%EF%BC%88%E4%BA%8C%EF%BC%89/">
-                
-                <div class="content">
-                    
-                    <div class="title">
-                        Vue重学计划（二）
-                    </div>
-                    
-                    
-                    <div class="time">
-                        <span>October</span>
-                        <span>&nbsp;7,&nbsp;</span>
-                        <span>2024</span>
-                    </div>
-                    
-                </div>
-            </a>
-        </article>
-        
-        <article class="post-list-item">
-            <a href="/2024/10/06/TreeShaking%E6%8A%80%E6%9C%AF%E6%B3%9B%E8%B0%88/">
-                
-                <div class="content">
-                    
-                    <div class="title">
-                        TreeShaking技术泛谈
-                    </div>
-                    
-                    
-                    <div class="time">
-                        <span>October</span>
-                        <span>&nbsp;6,&nbsp;</span>
-                        <span>2024</span>
-                    </div>
-                    
-                </div>
-            </a>
-        </article>
-        
-        <article class="post-list-item">
-            <a href="/2024/10/06/Vue%E9%87%8D%E5%AD%A6%E8%AE%A1%E5%88%92%EF%BC%88%E4%B8%80%EF%BC%89/">
-                
-                <div class="content">
-                    
-                    <div class="title">
-                        Vue重学计划（一）
-                    </div>
-                    
-                    
-                    <div class="time">
-                        <span>October</span>
-                        <span>&nbsp;6,&nbsp;</span>
-                        <span>2024</span>
-                    </div>
-                    
-                </div>
-            </a>
-        </article>
-        
-        <article class="post-list-item">
-            <a href="/2024/09/26/hello-Stranger/">
-                
-                <div class="content">
-                    
-                    <div class="title">
-                        Hello Stranger!
-                    </div>
-                    
-                    
-                    <div class="time">
-                        <span>September</span>
-                        <span>&nbsp;26,&nbsp;</span>
-                        <span>2024</span>
-                    </div>
-                    
-                </div>
-            </a>
-        </article>
+            </div>
+        </a>
         
     </div>
 
     
-</div>
+        
+        
+    
+</article>
+
         <footer>
     <div class="inner">
         <div class="links">
