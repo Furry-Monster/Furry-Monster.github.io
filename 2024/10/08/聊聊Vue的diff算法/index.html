@@ -171,7 +171,15 @@
 
     <div class="content">
         <p>相比大家早早听说过了虚拟DOM的存在，Diff算法的运用是虚拟DOM具有高性能的一个重要原因。</p>
-<h1 id="虚拟DOM"><a href="#虚拟DOM" class="headerlink" title="虚拟DOM"></a>虚拟DOM</h1><p>Vue的虚拟DOM实质上就是生成一个AST（抽象语法树Abstract Syntax Tree）<br><img src="/.io//09/26/hello-Stranger/28367780958.png" alt="1728367780958"></p>
+<h1 id="虚拟DOM"><a href="#虚拟DOM" class="headerlink" title="虚拟DOM"></a>虚拟DOM</h1><p>Vue的虚拟DOM实质上就是生成一个AST（抽象语法树Abstract Syntax Tree）<br><img src="/.io//%E8%81%8A%E8%81%8AVue%E7%9A%84diff%E7%AE%97%E6%B3%95/1728368888139.png" alt="1728368888139"></p>
+<p>我们可以用这一串代码来看看原生DOM有多复杂：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> div = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line"><span class="keyword">let</span> str = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> div) &#123;</span><br><span class="line">  str += key + <span class="string">&#x27;&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(str)</span><br></pre></td></tr></table></figure>
+
+<p>解决方案就是 我们可以用 <code>JS</code>的计算性能来换取操作 <code>DOM</code>所消耗的性能，既然我们逃不掉操作 <code>DOM</code>这道坎,但是我们可以尽可能少的操作 <code>DOM</code>，这时候就是Diff算法发挥的时候了</p>
+<h1 id="Diff算法"><a href="#Diff算法" class="headerlink" title="Diff算法"></a>Diff算法</h1><p>Diff 算法，在 Vue 里面就是叫做 <code>patch</code> ，它的核心就是参考 <a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=H3aijtI+xaIigBqfxKP0lA==.ca891itMtRaYyNev4FcPITuKvIoV/no7aV1ewicTT37iG8nGdEFMLHFgoOLp+ewu">Snabbdom</a>，通过新旧虚拟 DOM 对比(即 patch 过程)，找出最小变化的地方转为进行 DOM 操作</p>
+<blockquote>
+<p>在 Vue1 里是没有 patch 的，每个依赖都有单独的 Watcher 负责更新，当项目规模变大的时候性能就跟不上了，所以在 Vue2 里为了提升性能，改为每个组件只有一个Watcher，那我们需要更新的时候，怎么才能精确找到组件里发生变化的位置呢？所以 patch 它来了</p>
+</blockquote>
 
     </div>
 
