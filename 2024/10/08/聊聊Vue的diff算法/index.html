@@ -171,7 +171,7 @@
 
     <div class="content">
         <p>相比大家早早听说过了虚拟DOM的存在，Diff算法的运用是虚拟DOM具有高性能的一个重要原因。</p>
-<h1 id="虚拟DOM"><a href="#虚拟DOM" class="headerlink" title="虚拟DOM"></a>虚拟DOM</h1><p>Vue的虚拟DOM实质上就是生成一个AST（抽象语法树Abstract Syntax Tree）<br><img src="/.io//pic/1728368888139.png" alt="1728368888139"></p>
+<h1 id="虚拟DOM"><a href="#虚拟DOM" class="headerlink" title="虚拟DOM"></a>虚拟DOM</h1><p>Vue的虚拟DOM实质上就是生成一个AST（抽象语法树Abstract Syntax Tree）<br><img src="/../pic/1728368888139.png" alt="1728368888139"></p>
 <p>我们可以用这一串代码来看看原生DOM有多复杂：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> div = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line"><span class="keyword">let</span> str = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> div) &#123;</span><br><span class="line">  str += key + <span class="string">&#x27;&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(str)</span><br></pre></td></tr></table></figure>
 
