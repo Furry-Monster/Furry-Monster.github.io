@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>C#调用系统底层win32API - Furry Monster的博客</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="C#调用系统底层win32API - Furry Monster的博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="http://furry-monster.github.io/2024/10/30/C-%E8%B0%83%E7%94%A8%E7%B3%BB%E7%BB%9F%E5%BA%95%E5%B1%82win32API/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2024-10-30T06:20:22.000Z" />
+  
+  <meta property="og:article:author" content="FurryMonster" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+    <body
+        data-color-scheme="dark"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/Furry-Monster" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-codepen nav-item-icon" href="/" target="_blank" aria-label="CodePen">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-patreon nav-item-icon" href="/" target="_blank" aria-label="Patreon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-mastodon nav-item-icon" href="/" target="_blank" aria-label="Mastodon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-discord nav-item-icon" href="/" target="_blank" aria-label="Discord">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+
+        
+        <div class="date" id="date">
+            <span>October</span>
+            <span>30,</span>
+            <span>2024</span>
+        </div>
+        
+
+        <h1 class="title">C#调用系统底层win32API</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>最近学习 C# 学到了本机互操作性，之前一直有需求需要调用 <a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/windows/win32/apiindex/windows-api-list">Win32 API</a>，查阅了许多资料踩了不少坑（如类型映射、封送结构等），现在整理出一套调用 Win32 API 的方法，因此记录一下顺便分享给大家参考。</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a><strong>概念</strong></h2><p><em>.NET 采用 <strong>P&#x2F;Invoke</strong> 技术来从托管代码访问访问非托管库中的结构、回调和函数的一种技术，大多数 P&#x2F;Invoke API 包含在以下两个命名空间中：<code>System</code> 和 <code>System.Runtime.InteropServices</code>。 使用这两个命名空间可提供用于描述如何与本机组件通信的工具（引用来源：<a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/dotnet/standard/native-interop/pinvoke">平台调用 (P&#x2F;Invoke) | Microsoft Learn</a>）。</em></p>
+<p>可以简单理解为 .NET 可以调用使用 C&#x2F;C++ 开发的库中的函数，通常用于调用 <a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/windows/win32/apiindex/windows-api-list">Win32 API</a>。</p>
+<h2 id="最小示例"><a href="#最小示例" class="headerlink" title="最小示例"></a><strong>最小示例</strong></h2><p>以下是最小示例，下面示例中调用了 Win32 API 中的 <a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/windows/win32/api/winuser/nf-winuser-messagebox">MessageBox</a> 函数，<em>该函数显示一个模式对话框，其中包含一个系统图标、一组按钮和一条简短的应用程序特定消息，例如状态或错误信息。 消息框返回一个整数值，指示用户单击的按钮（引用来源：<a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/windows/win32/api/winuser/nf-winuser-messagebox">MessageBox 函数 (winuser.h) - Win32 apps | Microsoft Learn</a>）。</em></p>
+<p>示例来源：<a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/dotnet/standard/native-interop/pinvoke">平台调用 (P&#x2F;Invoke) | Microsoft Learn</a>。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Runtime.InteropServices;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Program</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Import user32.dll (containing the function we need) and define</span></span><br><span class="line">    <span class="comment">// the method corresponding to the native function.</span></span><br><span class="line">    [<span class="meta">DllImport(<span class="string">&quot;user32.dll&quot;</span>, CharSet = CharSet.Unicode, SetLastError = true)</span>]</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">extern</span> <span class="built_in">int</span> <span class="title">MessageBox</span>(<span class="params">IntPtr hWnd, <span class="built_in">string</span> lpText, <span class="built_in">string</span> lpCaption, <span class="built_in">uint</span> uType</span>)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Invoke the function as a regular managed method.</span></span><br><span class="line">        MessageBox(IntPtr.Zero, <span class="string">&quot;Command-line message box&quot;</span>, <span class="string">&quot;Attention!&quot;</span>, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述示例非常简单，但确实演示了从托管代码调用非托管函数所需执行的操作。 让我们逐步分析该示例：</p>
+<ul>
+<li>第 2 行显示 <code>System.Runtime.InteropServices</code> 命名空间（用于保存全部所需项）的 using 语句。</li>
+<li>第 8 行引入 <code>DllImport</code> 属性。 此属性将告诉运行时应该加载非托管 DLL。 传入的字符串是目标函数所在的 DLL。 此外，它还指定哪些<a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/dotnet/standard/native-interop/charset">字符集</a>用于封送字符串。 最后，它指定此函数调用 <a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/windows/desktop/api/errhandlingapi/nf-errhandlingapi-setlasterror">SetLastError</a>，且运行时应捕获相应错误代码，以便用户能够通过 <a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/dotnet/api/system.runtime.interopservices.marshal.getlastwin32error%23system-runtime-interopservices-marshal-getlastwin32error">Marshal.GetLastWin32Error()</a> 检索它。</li>
+<li>第 9 行显示了 P&#x2F;Invoke 的关键作用。 它定义了一个托管方法，该方法的签名与非托管方法 <strong>完全相同</strong> 。 可以看到，声明中包含一个新关键字 <code>extern</code>，告诉运行时这是一个外部方法。调用该方法时，运行时应在 <code>DllImport</code> 特性中指定的 DLL 内查找该方法。</li>
+</ul>
+<p><em>（引用来源：<a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/dotnet/standard/native-interop/pinvoke">平台调用 (P&#x2F;Invoke) | Microsoft Learn</a>）</em></p>
+<p>示例代码运行后结果如下图：</p>
+<p><img src="https://pica.zhimg.com/v2-fddb2e45c7259ef992f2ae85bc1a5b20_b.jpg"></p>
+<p>上面的解释中仍然存在一些疑惑，比如 <em>“该方法的签名与非托管方法完全相同”</em> ，但 C# 中的类型和 C&#x2F;C++ 中的类型并不完全一样，那么应当是存在一套类型的转换方法，官网示例中并未提到该方法，下面我会为大家说明类型映射方法。</p>
+<h2 id="类型封送"><a href="#类型封送" class="headerlink" title="类型封送"></a><strong>类型封送</strong></h2><p>C# 和 C&#x2F;C++ 的类型并不完全一致，因此需要一套类型映射表来进行转换后再发送给 C&#x2F;C++ 程序，这种技术叫做 <strong>类型封送（Type Marshalling）</strong> ， <em>封送是当类型需要在托管代码和本机代码之间切换时转换类型的过程。（引用来源：<a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/dotnet/standard/native-interop/type-marshalling">类型封送 - .NET | Microsoft Learn</a>）</em> 。</p>
+<h3 id="基本类型映射"><a href="#基本类型映射" class="headerlink" title="基本类型映射"></a><strong>基本类型映射</strong></h3><p>对于 C&#x2F;C++ 基本类型，官方给出了对应的 C# 类型映射表：</p>
+<table>
+<thead>
+<tr>
+<th>C# 关键字</th>
+<th>.NET 类型</th>
+<th>本机类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>byte</td>
+<td>System.Byte</td>
+<td>uint8_t</td>
+</tr>
+<tr>
+<td>sbyte</td>
+<td>System.SByte</td>
+<td>int8_t</td>
+</tr>
+<tr>
+<td>short</td>
+<td>System.Int16</td>
+<td>int16_t</td>
+</tr>
+<tr>
+<td>ushort</td>
+<td>System.UInt16</td>
+<td>uint16_t</td>
+</tr>
+<tr>
+<td>int</td>
+<td>System.Int32</td>
+<td>int32_t</td>
+</tr>
+<tr>
+<td>uint</td>
+<td>System.UInt32</td>
+<td>uint32_t</td>
+</tr>
+<tr>
+<td>long</td>
+<td>System.Int64</td>
+<td>int64_t</td>
+</tr>
+<tr>
+<td>ulong</td>
+<td>System.UInt64</td>
+<td>uint64_t</td>
+</tr>
+<tr>
+<td>char</td>
+<td>System.Char</td>
+<td>char 或 char16_t 依赖于 P&#x2F;Invoke 或结构的 CharSet。 请参阅字符集文档。</td>
+</tr>
+<tr>
+<td></td>
+<td>System.Char</td>
+<td>char* 或 char16_t* 依赖于 P&#x2F;Invoke 或结构的 CharSet。 请参阅字符集文档。</td>
+</tr>
+<tr>
+<td>nint</td>
+<td>System.IntPtr</td>
+<td>intptr_t</td>
+</tr>
+<tr>
+<td>nuint</td>
+<td>System.UIntPtr</td>
+<td>uintptr_t</td>
+</tr>
+<tr>
+<td></td>
+<td>.NET 指针类型（例如，void*）</td>
+<td>void*</td>
+</tr>
+<tr>
+<td></td>
+<td>从 System.Runtime.InteropServices.SafeHandle 派生的类型</td>
+<td>void*</td>
+</tr>
+<tr>
+<td></td>
+<td>从 System.Runtime.InteropServices.CriticalHandle 派生的类型</td>
+<td>void*</td>
+</tr>
+<tr>
+<td>bool</td>
+<td>System.Boolean</td>
+<td>Win32 BOOL 类型</td>
+</tr>
+<tr>
+<td>decimal</td>
+<td>System.Decimal</td>
+<td>COM DECIMAL 结构</td>
+</tr>
+<tr>
+<td></td>
+<td>.NET 委托</td>
+<td>本机函数指针</td>
+</tr>
+<tr>
+<td></td>
+<td>System.DateTime</td>
+<td>Win32 DATE 类型</td>
+</tr>
+<tr>
+<td></td>
+<td>System.Guid</td>
+<td>Win32 GUID 类型</td>
+</tr>
+</tbody></table>
+<p><em>（引用来源：<a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/dotnet/standard/native-interop/type-marshalling%23default-rules-for-marshalling-common-types">类型封送 - .NET | Microsoft Learn</a>）</em></p>
+<p>但 Win32 API 大部分类型并没有直接使用 C&#x2F;C++ 基本类型，而是使用了 Windows 数据类型，对此官方也给出了封送常见 Windows 数据类型对应的 C# 类型表：</p>
+<table>
+<thead>
+<tr>
+<th>Windows</th>
+<th>C#</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>BOOL</td>
+<td>int</td>
+</tr>
+<tr>
+<td>BOOLEAN</td>
+<td>byte</td>
+</tr>
+<tr>
+<td>BYTE</td>
+<td>byte</td>
+</tr>
+<tr>
+<td>UCHAR</td>
+<td>byte</td>
+</tr>
+<tr>
+<td>UINT8</td>
+<td>byte</td>
+</tr>
+<tr>
+<td>CCHAR</td>
+<td>byte</td>
+</tr>
+<tr>
+<td>CHAR</td>
+<td>sbyte</td>
+</tr>
+<tr>
+<td>CHAR</td>
+<td>sbyte</td>
+</tr>
+<tr>
+<td>INT8</td>
+<td>sbyte</td>
+</tr>
+<tr>
+<td>CSHORT</td>
+<td>short</td>
+</tr>
+<tr>
+<td>INT16</td>
+<td>short</td>
+</tr>
+<tr>
+<td>SHORT</td>
+<td>short</td>
+</tr>
+<tr>
+<td>ATOM</td>
+<td>ushort</td>
+</tr>
+<tr>
+<td>UINT16</td>
+<td>ushort</td>
+</tr>
+<tr>
+<td>USHORT</td>
+<td>ushort</td>
+</tr>
+<tr>
+<td>WORD</td>
+<td>ushort</td>
+</tr>
+<tr>
+<td>INT</td>
+<td>int</td>
+</tr>
+<tr>
+<td>INT32</td>
+<td>int</td>
+</tr>
+<tr>
+<td>LONG</td>
+<td>int</td>
+</tr>
+<tr>
+<td>LONG32</td>
+<td>int</td>
+</tr>
+<tr>
+<td>CLONG</td>
+<td>uint</td>
+</tr>
+<tr>
+<td>DWORD</td>
+<td>uint</td>
+</tr>
+<tr>
+<td>DWORD32</td>
+<td>uint</td>
+</tr>
+<tr>
+<td>UINT</td>
+<td>uint</td>
+</tr>
+<tr>
+<td>UINT32</td>
+<td>uint</td>
+</tr>
+<tr>
+<td>ULONG</td>
+<td>uint</td>
+</tr>
+<tr>
+<td>ULONG32</td>
+<td>uint</td>
+</tr>
+<tr>
+<td>INT64</td>
+<td>long</td>
+</tr>
+<tr>
+<td>LARGE_INTEGER</td>
+<td>long</td>
+</tr>
+<tr>
+<td>LONG64</td>
+<td>long</td>
+</tr>
+<tr>
+<td>LONGLONG</td>
+<td>long</td>
+</tr>
+<tr>
+<td>QWORD</td>
+<td>long</td>
+</tr>
+<tr>
+<td>DWORD64</td>
+<td>ulong</td>
+</tr>
+<tr>
+<td>UINT64</td>
+<td>ulong</td>
+</tr>
+<tr>
+<td>ULONG64</td>
+<td>ulong</td>
+</tr>
+<tr>
+<td>ULONGLONG</td>
+<td>ulong</td>
+</tr>
+<tr>
+<td>ULARGE_INTEGER</td>
+<td>ulong</td>
+</tr>
+<tr>
+<td>HRESULT</td>
+<td>int</td>
+</tr>
+<tr>
+<td>NTSTATUS</td>
+<td>int</td>
+</tr>
+</tbody></table>
+<p><em>（表格来源：<a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/dotnet/standard/native-interop/best-practices%23common-windows-data-types">本机互操作性最佳做法 - .NET | Microsoft Learn</a>，内容略作调整修改）</em></p>
+<p>此外，Win32 API 中还有一些常见的指针类型，转换表如下：</p>
+<table>
+<thead>
+<tr>
+<th>已签名的指针类型（C# 中使用 System.IntPtr 或 nint）</th>
+<th>未签名的指针类型（C# 中使用 System.UIntPtr 或 nuint）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HANDLE</td>
+<td>WPARAM</td>
+</tr>
+<tr>
+<td>HWND</td>
+<td>UINT_PTR</td>
+</tr>
+<tr>
+<td>HINSTANCE</td>
+<td>ULONG_PTR</td>
+</tr>
+<tr>
+<td>LPARAM</td>
+<td>SIZE_T</td>
+</tr>
+<tr>
+<td>LRESULT</td>
+<td></td>
+</tr>
+<tr>
+<td>LONG_PTR</td>
+<td></td>
+</tr>
+<tr>
+<td>INT_PTR</td>
+<td></td>
+</tr>
+</tbody></table>
+<p><em>（表格来源：<a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/dotnet/standard/native-interop/best-practices%23common-windows-data-types">本机互操作性最佳做法 - .NET | Microsoft Learn</a>，内容略作调整修改）</em></p>
+<h3 id="基本类型映射示例"><a href="#基本类型映射示例" class="headerlink" title="基本类型映射示例"></a><strong>基本类型映射示例</strong></h3><p>以上面<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/653484348/edit#%E6%9C%80%E5%B0%8F%E7%A4%BA%E4%BE%8B">最小示例</a>提到的 <a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/windows/win32/api/winuser/nf-winuser-messagebox">MessageBox</a> 函数为例，它在 C++ 的签名如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">MessageBox</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">  [in, optional] HWND    hWnd,</span></span></span><br><span class="line"><span class="params"><span class="function">  [in, optional] LPCTSTR lpText,</span></span></span><br><span class="line"><span class="params"><span class="function">  [in, optional] LPCTSTR lpCaption,</span></span></span><br><span class="line"><span class="params"><span class="function">  [in]           UINT    uType</span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>经过查表得知，入参中的 <code>HWND</code> 对应 <code>System.IntPtr</code> 或 <code>nint</code>，<code>LPCTSTR</code> 貌似没有在表中找到，这里看上去应该用 <code>string</code>（对于找不到映射的类型，后面会介绍更方便的类型转换方法），<code>UINT</code> 对应 <code>int</code>，返回类型的 <code>int</code> 对应 <code>int</code>。</p>
+<p>此外从 <a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/windows/win32/api/winuser/nf-winuser-messagebox%23requirements">MessageBox 函数 (winuser.h) - Win32 apps | Microsoft Learn</a> 要求部分可以得知，该函数存在于 <code>User32.dll</code> 文件中，因此使用 <code>DllImport</code> 特性第一个参数应当为 <code>user32.dll</code>（大小写不敏感）。</p>
+<p>因此该签名转换为 C# 签名如下：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">DllImport(<span class="string">&quot;user32.dll&quot;</span>, CharSet = CharSet.Unicode, SetLastError = true)</span>]</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">extern</span> <span class="built_in">int</span> <span class="title">MessageBox</span>(<span class="params">IntPtr hWnd, <span class="built_in">string</span> lpText, <span class="built_in">string</span> lpCaption, <span class="built_in">uint</span> uType</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="结构类型封送"><a href="#结构类型封送" class="headerlink" title="结构类型封送"></a><strong>结构类型封送</strong></h3><p>有的时候，我们需要封送结构（struct）类型，此时会用到 <a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/dotnet/api/system.runtime.interopservices.structlayoutattribute?view=net-7.0">StructLayout</a> 特性，使用方法如下：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">DllImport(<span class="string">&quot;kernel32.dll&quot;</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">extern</span> <span class="keyword">void</span> <span class="title">GetSystemTime</span>(<span class="params">SystemTime systemTime</span>)</span>;</span><br><span class="line"></span><br><span class="line">[<span class="meta">StructLayout(LayoutKind.Sequential)</span>]</span><br><span class="line"><span class="keyword">class</span> <span class="title">SystemTime</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">ushort</span> Year;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">ushort</span> Month;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">ushort</span> DayOfWeek;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">ushort</span> Day;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">ushort</span> Hour;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">ushort</span> Minute;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">ushort</span> Second;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">ushort</span> Millisecond;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span> &#123;</span><br><span class="line">    SystemTime st = <span class="keyword">new</span> SystemTime();</span><br><span class="line">    GetSystemTime(st);</span><br><span class="line">    Console.WriteLine(st.Year);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><em>（代码来源：<a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/dotnet/standard/native-interop/type-marshalling%23marshalling-classes-and-structs">类型封送 - .NET | Microsoft Learn</a>）</em></p>
+<p>当然，官方示例代码中使用的 <code>class</code> 也是可以的，具体使用 <code>class</code> 还是 <code>struct</code> 可以根据实际需求决定。</p>
+<h3 id="指针类型处理"><a href="#指针类型处理" class="headerlink" title="指针类型处理"></a><strong>指针类型处理</strong></h3><p>有的 Win32 API 会用到指针类型（通常以 <code>LP</code> 开头，具体以官方文档为准），C&#x2F;C++ 中指针可以用于入参和出参，这两个需要在 C# 中特别处理。</p>
+<h3 id="入参指针"><a href="#入参指针" class="headerlink" title="入参指针"></a><strong>入参指针</strong></h3><p>入参指针对应 C# 中的 <a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/dotnet/csharp/language-reference/keywords/in-parameter-modifier">in 关键字</a> 或 <a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/dotnet/csharp/language-reference/keywords/ref">ref 关键字</a>，这两者均能正常工作，具体区别请查看官方文档，这里不作具体解释。</p>
+<p>以 <a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/windows/win32/api/winuser/nf-winuser-translatemessage">TranslateMessage</a> API 为例，它在 C&#x2F;C++ 中的签名如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">TranslateMessage</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">  [in] <span class="type">const</span> MSG *lpMsg</span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>这里的 <code>*lpMsg</code> 前有个指针符号 <code>*</code>，加上最前面的 <code>[in]</code>，说明它是入参指针，因此转换为 C# 签名如下：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">DllImport(<span class="string">&quot;user32.dll&quot;</span>, SetLastError = true)</span>]</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">extern</span> <span class="built_in">int</span> <span class="title">TranslateMessage</span>(<span class="params"><span class="keyword">in</span> MSG lpMsg</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，<code>const MSG *lpMsg</code> 被转换为了 C# 中的 <code>in MSG lpMsg</code>。</p>
+<h3 id="出参指针"><a href="#出参指针" class="headerlink" title="出参指针"></a><strong>出参指针</strong></h3><p>出参（返回值）指针对应 C# 中的 <a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/dotnet/csharp/language-reference/keywords/out-parameter-modifier">out</a> 关键字，以 <a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/windows/win32/api/winuser/nf-winuser-getmessage">GetMessage</a> API 为例，它在 C&#x2F;C++ 中的签名如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">GetMessage</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">  [out]          LPMSG lpMsg,</span></span></span><br><span class="line"><span class="params"><span class="function">  [in, optional] HWND  hWnd,</span></span></span><br><span class="line"><span class="params"><span class="function">  [in]           UINT  wMsgFilterMin,</span></span></span><br><span class="line"><span class="params"><span class="function">  [in]           UINT  wMsgFilterMax</span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>这里的 <code>lpMsg</code> 入参前面有个 <code>[out]</code> 字样，说明它是出参指针，转换为 C# 签名如下：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">DllImport(<span class="string">&quot;user32.dll&quot;</span>, SetLastError = true)</span>]</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">extern</span> <span class="built_in">int</span> <span class="title">GetMessage</span>(<span class="params"><span class="keyword">out</span> MSG lpMsg, <span class="built_in">nint</span> hWnd, <span class="built_in">uint</span> wMsgFilterMin, <span class="built_in">uint</span> wMsgFilterMax</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，<code>LPMSG lpMsg</code> 参数在 C# 中被转换为了 <code>out MSG lpMsg</code>。</p>
+<h3 id="更简便方法"><a href="#更简便方法" class="headerlink" title="更简便方法"></a><strong>更简便方法</strong></h3><p>如果项目中要用到大量 Win32 API，每个签名都要自己写一遍确实是很麻烦，而且有的 C++ Windows 类型官方并没有给出 C# 中对应的类型映射（比如 <code>LPCTSTR</code>），这里有一个更简便的方法来编写签名：<a href="https://link.zhihu.com/?target=http://pinvoke.net/index.aspx">pinvoke.net: the interop wiki!</a>。</p>
+<p>该网站记录了大量的 Win32 API 在 C# 或 VB 中的签名，因此你可以直接复制过来使用，还是以 <code>MessageBox</code> 函数为例，我们在该网站左上角搜索该函数，然后在搜索结果中找到 <code>MessageBox</code> 函数并打开结果页：<a href="https://link.zhihu.com/?target=http://pinvoke.net/default.aspx/user32/MessageBox.html">pinvoke.net: MessageBox (user32)</a>：</p>
+<p><img src="https://pic4.zhimg.com/v2-fd11acad2fc58bb46010e4d1bcd8aab9_b.jpg"></p>
+<p><img src="https://picx.zhimg.com/v2-87fa5a728e6cb0305550ddbd11d090dd_b.jpg"></p>
+<p><img src="https://pic2.zhimg.com/v2-8e65bd9aaac3a6e8377e5f66797bebfd_b.jpg"></p>
+<p>可以看到，在“C# Signature”中，已经帮我们写好了该 Win32 API 在 C# 中对应的签名，我们直接复制使用就可以了。</p>
+<h2 id="回调（委托）"><a href="#回调（委托）" class="headerlink" title="回调（委托）"></a><strong>回调（委托）</strong></h2><p>有的 API 需要传入回调函数，这里应当使用 <a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/dotnet/csharp/delegate-class">delegate 关键字</a> 来创建委托函数，如 <a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/windows/win32/api/winuser/nf-winuser-setwindowshookexa">SetWindowsHookEx</a> 函数的参数 2 使用到了回调函数，类型为 <a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/windows/win32/api/winuser/nc-winuser-hookproc">HookProc</a>，该函数 C++ 签名如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">LRESULT <span class="title">Hookproc</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">       <span class="type">int</span> code,</span></span></span><br><span class="line"><span class="params"><span class="function">  [in] WPARAM wParam,</span></span></span><br><span class="line"><span class="params"><span class="function">  [in] LPARAM lParam</span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>转换为 C# 签名如下：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">delegate</span> IntPtr <span class="title">HookProc</span>(<span class="params"><span class="built_in">int</span> code, IntPtr wParam, IntPtr lParam</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>使用方法如下：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 签名定义</span></span><br><span class="line">[<span class="meta">DllImport(<span class="string">&quot;User32.dll&quot;</span>, SetLastError = true)</span>]</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">extern</span> <span class="built_in">nint</span> <span class="title">SetWindowsHookEx</span>(<span class="params"><span class="built_in">int</span> hookType, HookProc lpfn, <span class="built_in">nint</span> hMod, <span class="built_in">int</span> dwThreadId</span>)</span>;</span><br><span class="line"><span class="function"><span class="built_in">delegate</span> IntPtr <span class="title">HookProc</span>(<span class="params"><span class="built_in">int</span> code, IntPtr wParam, IntPtr lParam</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line">HookProc callback = <span class="keyword">new</span>((<span class="built_in">int</span> code, <span class="built_in">nint</span> wParam, <span class="built_in">nint</span> lParam) =&gt;</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 具体代码实现省略</span></span><br><span class="line">    <span class="keyword">return</span> CallNextHookEx(<span class="number">0</span>, code, wParam, lParam);</span><br><span class="line">&#125;);</span><br><span class="line">SetWindowsHookEx(<span class="number">14</span>, callback, <span class="number">0</span>, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<p>当然，这个签名转换也能在 <a href="https://link.zhihu.com/?target=http://pinvoke.net/default.aspx/Delegates/HookProc.html">pinvoke.net: HookProc (Delegates)</a> 中找到。</p>
+<h2 id="非托管内存管理"><a href="#非托管内存管理" class="headerlink" title="非托管内存管理"></a><strong>非托管内存管理</strong></h2><p>有的 API 需要操作内存，.NET 提供了 API 来操作非托管内存：<a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/dotnet/api/system.runtime.interopservices.marshal?view=net-7.0">Marshal 类 (System.Runtime.InteropServices) | Microsoft Learn</a>。以<a href="https://link.zhihu.com/?target=https://learn.microsoft.com/zh-cn/windows/win32/dataxchg/using-the-clipboard%23copying-information-to-the-clipboard">复制纯文本到剪贴板</a>为例，示例代码请查看：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/653484348/edit#%E5%A4%8D%E5%88%B6%E6%96%87%E6%9C%AC%E5%88%B0%E5%89%AA%E8%B4%B4%E6%9D%BF">复制文本到剪贴板</a>。</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a><strong>示例</strong></h2><p>为方便大家理解，这里提供一些个人写的一些示例。</p>
+<h3 id="监控并打印光标位置"><a href="#监控并打印光标位置" class="headerlink" title="监控并打印光标位置"></a><strong>监控并打印光标位置</strong></h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System.Runtime.InteropServices;</span><br><span class="line"><span class="keyword">using</span> System.Text.Json;</span><br><span class="line"><span class="keyword">using</span> System.Text.Json.Serialization;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Program</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">StructLayout(LayoutKind.Sequential)</span>]</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">record</span> <span class="keyword">struct</span> <span class="title">POINT</span>(<span class="params"><span class="built_in">int</span> X, <span class="built_in">int</span> Y</span>)</span>;</span><br><span class="line">    [<span class="meta">StructLayout(LayoutKind.Sequential)</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">struct</span> MSG</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">nint</span> hwnd;</span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">int</span> message;</span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">int</span> wParam;</span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">int</span> lParam;</span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">int</span> time;</span><br><span class="line">        <span class="keyword">public</span> POINT pt;</span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">int</span> lPrivate;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">DllImport(<span class="string">&quot;user32.dll&quot;</span>, SetLastError = true)</span>]</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">extern</span> <span class="built_in">int</span> <span class="title">GetMessage</span>(<span class="params"><span class="keyword">out</span> MSG lpMsg, <span class="built_in">nint</span> hWnd, <span class="built_in">uint</span> wMsgFilterMin, <span class="built_in">uint</span> wMsgFilterMax</span>)</span>;</span><br><span class="line">    [<span class="meta">DllImport(<span class="string">&quot;user32.dll&quot;</span>, SetLastError = true)</span>]</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">extern</span> <span class="built_in">int</span> <span class="title">TranslateMessage</span>(<span class="params"><span class="keyword">in</span> MSG lpMsg</span>)</span>;</span><br><span class="line">    [<span class="meta">DllImport(<span class="string">&quot;user32.dll&quot;</span>, SetLastError = true)</span>]</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">extern</span> <span class="built_in">int</span> <span class="title">DispatchMessage</span>(<span class="params"><span class="keyword">in</span> MSG lpMsg</span>)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="built_in">delegate</span> <span class="built_in">nint</span> <span class="title">HookProc</span>(<span class="params"><span class="built_in">int</span> code, <span class="built_in">nint</span> wParam, <span class="built_in">nint</span> lParam</span>)</span>;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">DllImport(<span class="string">&quot;User32.dll&quot;</span>, SetLastError = true)</span>]</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">extern</span> <span class="built_in">nint</span> <span class="title">SetWindowsHookEx</span>(<span class="params"><span class="built_in">int</span> hookType, HookProc lpfn, <span class="built_in">nint</span> hMod, <span class="built_in">int</span> dwThreadId</span>)</span>;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">DllImport(<span class="string">&quot;user32.dll&quot;</span>, SetLastError = true)</span>]</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">extern</span> <span class="built_in">bool</span> <span class="title">UnhookWindowsHookEx</span>(<span class="params"><span class="built_in">nint</span> hhk</span>)</span>;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">DllImport(<span class="string">&quot;user32.dll&quot;</span>)</span>]</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">extern</span> <span class="built_in">nint</span> <span class="title">CallNextHookEx</span>(<span class="params"><span class="built_in">nint</span> hhk, <span class="built_in">int</span> nCode, <span class="built_in">nint</span> wParam, <span class="built_in">nint</span> lParam</span>)</span>;</span><br><span class="line">    [<span class="meta">StructLayout(LayoutKind.Sequential)</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">struct</span> MSLLHOOKSTRUCT</span><br><span class="line">    &#123;</span><br><span class="line">        [<span class="meta">JsonInclude</span>]</span><br><span class="line">        <span class="keyword">public</span> POINT pt;</span><br><span class="line">        [<span class="meta">JsonInclude</span>]</span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">int</span> mouseData;</span><br><span class="line">        [<span class="meta">JsonInclude</span>]</span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">int</span> flags;</span><br><span class="line">        [<span class="meta">JsonInclude</span>]</span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">int</span> time;</span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">nuint</span> dwExtraInfo;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        HookProc callback = <span class="keyword">new</span>((<span class="built_in">int</span> code, <span class="built_in">nint</span> wParam, <span class="built_in">nint</span> lParam) =&gt;</span><br><span class="line">        &#123;</span><br><span class="line">            MSLLHOOKSTRUCT data = Marshal.PtrToStructure&lt;MSLLHOOKSTRUCT&gt;(lParam);</span><br><span class="line">            Console.WriteLine(JsonSerializer.Serialize(data));</span><br><span class="line">            <span class="keyword">return</span> CallNextHookEx(<span class="number">0</span>, code, wParam, lParam);</span><br><span class="line">        &#125;);</span><br><span class="line">        SetWindowsHookEx(<span class="number">14</span>, callback, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        MSG msg;</span><br><span class="line">        <span class="keyword">while</span> (GetMessage(<span class="keyword">out</span> msg, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>) &gt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            TranslateMessage(<span class="keyword">in</span> msg);</span><br><span class="line">            DispatchMessage(<span class="keyword">in</span> msg);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="复制文本到剪贴板"><a href="#复制文本到剪贴板" class="headerlink" title="复制文本到剪贴板"></a><strong>复制文本到剪贴板</strong></h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System.Runtime.InteropServices;</span><br><span class="line"><span class="keyword">using</span> System.Text;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Program</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">DllImport(<span class="string">&quot;user32.dll&quot;</span>, SetLastError = true)</span>]</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">extern</span> <span class="built_in">bool</span> <span class="title">OpenClipboard</span>(<span class="params">IntPtr hWndNewOwner</span>)</span>;</span><br><span class="line">    [<span class="meta">DllImport(<span class="string">&quot;user32.dll&quot;</span>)</span>]</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">extern</span> <span class="built_in">bool</span> <span class="title">EmptyClipboard</span>()</span>;</span><br><span class="line">    [<span class="meta">DllImport(<span class="string">&quot;user32.dll&quot;</span>, SetLastError = true)</span>]</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">extern</span> <span class="built_in">int</span> <span class="title">SetClipboardData</span>(<span class="params"><span class="built_in">int</span> uFormat, IntPtr hMem</span>)</span>;</span><br><span class="line">    [<span class="meta">DllImport(<span class="string">&quot;kernel32.dll&quot;</span>)</span>]</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">extern</span> IntPtr <span class="title">GlobalLock</span>(<span class="params">IntPtr hMem</span>)</span>;</span><br><span class="line">    [<span class="meta">DllImport(<span class="string">&quot;kernel32.dll&quot;</span>)</span>]</span><br><span class="line">    [<span class="meta">return: MarshalAs(UnmanagedType.Bool)</span>]</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">extern</span> <span class="built_in">bool</span> <span class="title">GlobalUnlock</span>(<span class="params">IntPtr hMem</span>)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 复制当前时间到剪贴板，&quot;\0&quot;指示字符串结束</span></span><br><span class="line">        <span class="built_in">string</span> text = <span class="string">$&quot;现在是北京时间 <span class="subst">&#123;DateTime.Now&#125;</span>\0&quot;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 打开剪贴板</span></span><br><span class="line">        <span class="keyword">if</span> (!OpenClipboard(IntPtr.Zero))</span><br><span class="line">        &#123;</span><br><span class="line">            Console.WriteLine(<span class="string">&quot;打开剪贴板失败。&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 清空剪贴板</span></span><br><span class="line">        EmptyClipboard();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 文本编码为 Unicode 字节数组</span></span><br><span class="line">        <span class="keyword">var</span> encoder = <span class="keyword">new</span> UnicodeEncoding();</span><br><span class="line">        <span class="built_in">byte</span>[] buffer = encoder.GetBytes(text);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 分配内存</span></span><br><span class="line">        <span class="keyword">var</span> hglbCopy = Marshal.AllocHGlobal(buffer.Length);</span><br><span class="line">        <span class="comment">// 锁定内存</span></span><br><span class="line">        <span class="keyword">var</span> lptstrCopy = GlobalLock(hglbCopy);</span><br><span class="line">        <span class="comment">// 写入内存</span></span><br><span class="line">        <span class="built_in">int</span> offset = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> b <span class="keyword">in</span> buffer)</span><br><span class="line">        &#123;</span><br><span class="line">            Marshal.WriteByte(lptstrCopy, offset, b);</span><br><span class="line">            offset++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 解锁内存</span></span><br><span class="line">        GlobalUnlock(hglbCopy);</span><br><span class="line">        <span class="comment">// 设置剪贴板数据，13 指示格式为 Unicode 文本，枚举参考：https://learn.microsoft.com/zh-cn/windows/win32/dataxchg/standard-clipboard-formats#constants</span></span><br><span class="line">        SetClipboardData(<span class="number">13</span>, hglbCopy);</span><br><span class="line">        <span class="comment">// 释放内存</span></span><br><span class="line">        Marshal.FreeHGlobal(hglbCopy);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by FurryMonster, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/NET/" class="tag">#.NET</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2024/10/31/%E9%80%9A%E8%BF%87EF%E5%9C%A8Avalonia%E4%B8%AD%E6%93%8D%E4%BD%9CSqlite/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">通过EF在Avalonia中操作Sqlite</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2024/10/24/10-24%E9%9A%8F%E7%AC%94/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">10.24随笔</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/resume" class="item">Resume</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Projects</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/Furry-Monster/YouOnlyLockOncev1.0" class="item">YouOnlyLockOnce</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/Furry-Monster" class="item">GitHub</a>
+                
+                <a href="" class="item">CodePen</a>
+                
+                <a href="" class="item">Patreon</a>
+                
+                <a href="" class="item">Mastodon</a>
+                
+                <a href="" class="item">Discord</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 FurryMonster<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

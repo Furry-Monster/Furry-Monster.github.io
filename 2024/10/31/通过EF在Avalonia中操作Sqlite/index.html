@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>通过EF在Avalonia中操作Sqlite - Furry Monster的博客</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="通过EF在Avalonia中操作Sqlite - Furry Monster的博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="http://furry-monster.github.io/2024/10/31/%E9%80%9A%E8%BF%87EF%E5%9C%A8Avalonia%E4%B8%AD%E6%93%8D%E4%BD%9CSqlite/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2024-10-31T04:13:16.000Z" />
+  
+  <meta property="og:article:author" content="FurryMonster" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+    <body
+        data-color-scheme="dark"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/Furry-Monster" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-codepen nav-item-icon" href="/" target="_blank" aria-label="CodePen">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-patreon nav-item-icon" href="/" target="_blank" aria-label="Patreon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-mastodon nav-item-icon" href="/" target="_blank" aria-label="Mastodon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-discord nav-item-icon" href="/" target="_blank" aria-label="Discord">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+
+        
+        <div class="date" id="date">
+            <span>October</span>
+            <span>31,</span>
+            <span>2024</span>
+        </div>
+        
+
+        <h1 class="title">通过EF在Avalonia中操作Sqlite</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>首选我们建个MVVM模板的项目，在项目中引入包 <code>Microsoft.EntityFrameworkCore.Sqlite</code></p>
+<p>1、创建实体</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">TodoEntity</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> Guid Id &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Thing &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> DateTime CreateTime &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2、创建上下文</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">ublic <span class="keyword">class</span> <span class="title">DatabaseContext</span> : <span class="title">DbContext</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DatabaseContext</span>(<span class="params">DbContextOptions&lt;DatabaseContext&gt; options</span>)</span></span><br><span class="line"><span class="function">        : <span class="title">base</span>(<span class="params">options</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DbSet</span>&lt;<span class="title">TodoEntity</span>&gt; TodoEntities</span> &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnModelCreating</span>(<span class="params">ModelBuilder model</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        model.Entity&lt;TodoEntity&gt;(m =&gt;</span><br><span class="line">        &#123;</span><br><span class="line">            m.ToTable(<span class="string">&quot;todo&quot;</span>);</span><br><span class="line">            m.Property(c =&gt; c.Id);</span><br><span class="line">            m.Property(c =&gt; c.Thing).IsRequired();</span><br><span class="line">            m.HasKey(c =&gt; c.Id);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3、创建Factory</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">DatabaseContextFactory</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> DatabaseContext <span class="title">CreateDbContext</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> m = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, <span class="string">&quot;todo.db&quot;</span>);</span><br><span class="line">        <span class="keyword">var</span> options = <span class="keyword">new</span> DbContextOptionsBuilder&lt;DatabaseContext&gt;();</span><br><span class="line">        options.UseSqlite(<span class="string">$&quot;Data Source=<span class="subst">&#123;m&#125;</span>;&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> DatabaseContext(options.Options);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DatabaseContext <span class="title">CreateDbContext</span>()</span> =&gt; CreateDbContext(<span class="keyword">new</span> <span class="built_in">string</span>[<span class="number">0</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>4、启动时创建一下数据库</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnFrameworkInitializationCompleted</span>()</span></span><br><span class="line">   &#123;</span><br><span class="line">       <span class="keyword">if</span> (ApplicationLifetime <span class="keyword">is</span> IClassicDesktopStyleApplicationLifetime desktop)</span><br><span class="line">       &#123;</span><br><span class="line">           desktop.MainWindow = <span class="keyword">new</span> MainWindow();</span><br><span class="line"></span><br><span class="line">           desktop.Startup += OnDesktopOnStartup;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">base</span>.OnFrameworkInitializationCompleted();</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">OnDesktopOnStartup</span>(<span class="params"><span class="built_in">object</span> sender, ControlledApplicationLifetimeStartupEventArgs args</span>)</span></span><br><span class="line">   &#123;</span><br><span class="line">       <span class="keyword">using</span> <span class="keyword">var</span> db = <span class="keyword">new</span> DatabaseContextFactory().CreateDbContext();</span><br><span class="line">       db.Database.EnsureCreated();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>5、修改MainWindowViewModel</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MainWindowViewModel</span> : <span class="title">ViewModelBase</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> ObservableCollection&lt;TodoEntity&gt; _todoEntities = <span class="keyword">new</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> ObservableCollection&lt;TodoEntity&gt; TodoEntities</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span> =&gt; _todoEntities;</span><br><span class="line">        <span class="keyword">set</span> =&gt; <span class="keyword">this</span>.RaiseAndSetIfChanged(<span class="keyword">ref</span> _todoEntities, <span class="keyword">value</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Add</span>(<span class="params"><span class="built_in">string</span> thing</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">using</span> <span class="keyword">var</span> db = <span class="keyword">new</span> DatabaseContextFactory().CreateDbContext();</span><br><span class="line">        db.TodoEntities.Add(<span class="keyword">new</span> TodoEntity()</span><br><span class="line">        &#123;</span><br><span class="line">            Id = <span class="keyword">new</span> Guid(),</span><br><span class="line">            Thing = thing,</span><br><span class="line">            CreateTime = DateTime.Now</span><br><span class="line">        &#125;);</span><br><span class="line">        db.SaveChanges();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Refresh</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">using</span> <span class="keyword">var</span> db = <span class="keyword">new</span> DatabaseContextFactory().CreateDbContext();</span><br><span class="line">        <span class="keyword">var</span> m = db.TodoEntities.ToList();</span><br><span class="line">        TodoEntities.Clear();</span><br><span class="line">        TodoEntities.AddRange(m);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Clear</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        TodoEntities.Clear();</span><br><span class="line">        <span class="keyword">using</span> <span class="keyword">var</span> db = <span class="keyword">new</span> DatabaseContextFactory().CreateDbContext();</span><br><span class="line">        <span class="keyword">var</span> m = db.TodoEntities.ToList();</span><br><span class="line">        db.TodoEntities.RemoveRange(m);</span><br><span class="line">        db.SaveChanges();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>6、修改MainWindow</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">&lt;Window xmlns=&quot;https://github.com/avaloniaui&quot;</span><br><span class="line">        xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;</span><br><span class="line">        xmlns:vm=&quot;using:SqliteEFDemo.ViewModels&quot;</span><br><span class="line">        xmlns:d=&quot;http://schemas.microsoft.com/expression/blend/2008&quot;</span><br><span class="line">        xmlns:mc=&quot;http://schemas.openxmlformats.org/markup-compatibility/2006&quot;</span><br><span class="line">        mc:Ignorable=&quot;d&quot; d:DesignWidth=&quot;500&quot; d:DesignHeight=&quot;450&quot;</span><br><span class="line">        Width=&quot;500&quot;</span><br><span class="line">        x:Class=&quot;SqliteEFDemo.Views.MainWindow&quot;</span><br><span class="line">        x:DataType=&quot;vm:MainWindowViewModel&quot;</span><br><span class="line">        Icon=&quot;/Assets/avalonia-logo.ico&quot;</span><br><span class="line">        Title=&quot;SqliteEFDemo&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;Design.DataContext&gt;</span><br><span class="line">        &lt;!-- This only sets the DataContext for the previewer in an IDE,</span><br><span class="line">             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) --&gt;</span><br><span class="line">        &lt;vm:MainWindowViewModel/&gt;</span><br><span class="line">    &lt;/Design.DataContext&gt;</span><br><span class="line"></span><br><span class="line">    &lt;Grid RowDefinitions=&quot;Auto,*&quot;&gt;</span><br><span class="line">        &lt;StackPanel Orientation=&quot;Horizontal&quot; Spacing=&quot;20&quot; Margin=&quot;10 0&quot;&gt;</span><br><span class="line">            &lt;TextBox Name=&quot;Thing&quot; Width=&quot;200&quot; /&gt;</span><br><span class="line">            &lt;Button Content=&quot;Add&quot; x:Name=&quot;Add&quot; Click=&quot;Add_OnClick&quot;/&gt;</span><br><span class="line">            &lt;Button Content=&quot;Refresh&quot; x:Name=&quot;Refresh&quot; Click=&quot;Refresh_OnClick&quot;/&gt;</span><br><span class="line">            &lt;Button Content=&quot;Clear&quot; x:Name=&quot;Clear&quot; Click=&quot;Clear_OnClick&quot;/&gt;</span><br><span class="line">        &lt;/StackPanel&gt;</span><br><span class="line">      </span><br><span class="line">        &lt;StackPanel Orientation=&quot;Vertical&quot; Grid.Row=&quot;1&quot;&gt;</span><br><span class="line">            &lt;ItemsControl Items=&quot;&#123;Binding TodoEntities&#125;&quot;&gt;</span><br><span class="line">                &lt;ItemsControl.ItemTemplate&gt;</span><br><span class="line">                    &lt;DataTemplate&gt;</span><br><span class="line">                        &lt;TextBlock Text=&quot;&#123;Binding Thing&#125;&quot; Margin=&quot;20 10&quot;/&gt;</span><br><span class="line">                    &lt;/DataTemplate&gt;</span><br><span class="line">                &lt;/ItemsControl.ItemTemplate&gt;</span><br><span class="line">            &lt;/ItemsControl&gt;</span><br><span class="line">        &lt;/StackPanel&gt;</span><br><span class="line">    &lt;/Grid&gt;</span><br><span class="line">  </span><br><span class="line">&lt;/Window&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>7、修改MainWindow.axaml.cs</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">partial</span> <span class="keyword">class</span> <span class="title">MainWindow</span> : <span class="title">Window</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> MainWindowViewModel vm;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MainWindow</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        InitializeComponent();</span><br><span class="line">        vm = <span class="keyword">new</span> MainWindowViewModel();</span><br><span class="line">        <span class="keyword">this</span>.DataContext = vm;</span><br><span class="line">        vm.Refresh();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">Add_OnClick</span>(<span class="params"><span class="built_in">object</span>? sender, RoutedEventArgs e</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> thingTb = <span class="keyword">this</span>.FindControl&lt;TextBox&gt;(<span class="string">&quot;Thing&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> s = thingTb?.Text?.Trim();</span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">string</span>.IsNullOrEmpty(s))</span><br><span class="line">        &#123;</span><br><span class="line">            vm.Add(s);</span><br><span class="line">            vm.Refresh();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">Refresh_OnClick</span>(<span class="params"><span class="built_in">object</span>? sender, RoutedEventArgs e</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        vm.Refresh();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">Clear_OnClick</span>(<span class="params"><span class="built_in">object</span>? sender, RoutedEventArgs e</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        vm.Clear();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img2023.cnblogs.com/blog/719904/202305/719904-20230529163532763-1335029925.png"></p>
+<p>如果要使用加密的sqlite, 要引入包 <code>*SQLitePCLRaw.bundle_e_sqlcipher*</code> , 不然会出现</p>
+<p><code>You specified a password in the connection string, but the native SQLite library &#39;e_sqlite3&#39; doesn&#39;t support encryption.</code> 的报错信息</p>
+<p>同时把Factory改为下面这样</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">DatabaseContextFactory</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> DatabaseContext <span class="title">CreateDbContext</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> m = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, <span class="string">&quot;todo.db&quot;</span>);</span><br><span class="line">        <span class="keyword">var</span> options = <span class="keyword">new</span> DbContextOptionsBuilder&lt;DatabaseContext&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//要加密 需要引入包 SQLitePCLRaw.bundle_e_sqlcipher</span></span><br><span class="line">        <span class="keyword">var</span> connStr = <span class="keyword">new</span> SqliteConnectionStringBuilder()</span><br><span class="line">        &#123;</span><br><span class="line">            DataSource = m,</span><br><span class="line">            Mode = SqliteOpenMode.ReadWriteCreate,</span><br><span class="line">            Password = <span class="string">&quot;admin&quot;</span></span><br><span class="line">        &#125;.ToString();</span><br><span class="line"></span><br><span class="line">        options.UseSqlite(connStr);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> DatabaseContext(options.Options);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DatabaseContext <span class="title">CreateDbContext</span>()</span> =&gt; CreateDbContext(<span class="keyword">new</span> <span class="built_in">string</span>[<span class="number">0</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by FurryMonster, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/NET/" class="tag">#.NET</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2024/11/06/%E4%B8%80%E6%AC%A1Avalonia%E5%91%BD%E4%BB%A4%E7%BB%91%E5%AE%9ABug/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">一次Avalonia命令绑定Bug</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2024/10/30/C-%E8%B0%83%E7%94%A8%E7%B3%BB%E7%BB%9F%E5%BA%95%E5%B1%82win32API/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">C#调用系统底层win32API</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/resume" class="item">Resume</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Projects</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/Furry-Monster/YouOnlyLockOncev1.0" class="item">YouOnlyLockOnce</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/Furry-Monster" class="item">GitHub</a>
+                
+                <a href="" class="item">CodePen</a>
+                
+                <a href="" class="item">Patreon</a>
+                
+                <a href="" class="item">Mastodon</a>
+                
+                <a href="" class="item">Discord</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 FurryMonster<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

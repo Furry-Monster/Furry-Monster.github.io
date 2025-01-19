@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>浅析图形渲染空间 - Furry Monster的博客</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="浅析图形渲染空间 - Furry Monster的博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="http://furry-monster.github.io/2024/11/16/%E6%B5%85%E6%9E%90%E5%9B%BE%E5%BD%A2%E6%B8%B2%E6%9F%93%E7%A9%BA%E9%97%B4/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2024-11-16T12:07:55.000Z" />
+  
+  <meta property="og:article:author" content="FurryMonster" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+    <body
+        data-color-scheme="dark"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/Furry-Monster" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-codepen nav-item-icon" href="/" target="_blank" aria-label="CodePen">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-patreon nav-item-icon" href="/" target="_blank" aria-label="Patreon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-mastodon nav-item-icon" href="/" target="_blank" aria-label="Mastodon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-discord nav-item-icon" href="/" target="_blank" aria-label="Discord">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+
+        
+        <div class="date" id="date">
+            <span>November</span>
+            <span>16,</span>
+            <span>2024</span>
+        </div>
+        
+
+        <h1 class="title">浅析图形渲染空间</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>之前学习Unity的渲染管线的时候，比较少接触空间这方面的知识。现在重新从Unity转向UE的时候，发现空间这部分的知识还是挺重要的，遂开一篇博客记录一下学习历程。</p>
+<h1 id="坐标空间术语"><a href="#坐标空间术语" class="headerlink" title="坐标空间术语"></a>坐标空间术语</h1><p>这部分没啥必要细说，按照UE5的官方文档所言：</p>
+<blockquote>
+<p>坐标空间术语包括两方面：<strong>空间</strong> 与 <strong>空间变换</strong></p>
+</blockquote>
+<h2 id="空间"><a href="#空间" class="headerlink" title="空间"></a>空间</h2><table>
+<thead>
+<tr>
+<th>虚幻引擎中的坐标空间</th>
+<th>别名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tangent (切线空间)</td>
+<td></td>
+<td>为正交坐标系（插值后将发生偏移），可为左手或右手坐标系。<br />TangentToLocal (切线空间到局部空间)变换仅包含旋转变换，<br />因此它是标准正交坐标变换。（可通过转置或求逆进行反变换）。</td>
+</tr>
+<tr>
+<td>Local (局部空间)</td>
+<td>Object Space (对象空间)</td>
+<td>为正交坐标系，可为左手或右手坐标系（常用是右手坐标系）。<br />LocalToWorld (局部空间变换到世界空间)变换，<br />非线性变换链的起始变换（如果包含缩放变换）以上及平移变换。</td>
+</tr>
+<tr>
+<td>World (世界空间)</td>
+<td></td>
+<td>WorldToView (世界空间到视镜像空间)变换仅包含旋转和平移变换，<br />所以View（视图）空间中的坐标和World（世界）空间中的坐标是一样。</td>
+</tr>
+<tr>
+<td>TranslatedWorld (平移的世界空间)</td>
+<td></td>
+<td>TranslatedWorld (平移的世界空间) &#x3D; World （世界空间） + PreViewTranslation （在视变换之前进行的平移变换）</td>
+</tr>
+<tr>
+<td>View (观察空间)</td>
+<td>CameraSpace (相机空间)</td>
+<td>平移矩阵用于从组合变换矩阵中去除浮动相机位置，这提高了移动项点的精确度。<br />ViewToClip (观察空间到剪裁空体)变换包括XY、Y轴上的缩放变换。但不包括Z轴变换(这种变换&#x2F;缩&#x2F;偏向中)。<br />可在Z轴上缩放以及平移，通过变换挤紧坐标为空间为ClipSpace（剪裁空间）。</td>
+</tr>
+<tr>
+<td>Clip (裁剪空间)</td>
+<td>HomogenousCoordinates (齐次坐标系)、<br />PostProjectionSpace (后投影空间)、<br />ProjectionSpace (投影空间)</td>
+<td>以透视投影矩阵形式进行透视的空间坐标。注意剪裁空间中的W和视投影转件的位一样。</td>
+</tr>
+<tr>
+<td>Screen (屏幕空间)</td>
+<td>OpenGL 的 NormalizedDeviceCoordinates (规格化设备坐标系)</td>
+<td>在透视投影完成之后：<br />左侧&#x2F;右侧 -1,1，顶部&#x2F;底部 1,-1，近&#x2F;远 0,1 <br />(OpenGL RH需要更改个固定变为 -1,1)</td>
+</tr>
+<tr>
+<td>Viewport (视口空间)</td>
+<td>ViewportCoordinates (视口坐标系)、<br />WindowCoordinates (窗口坐标系)</td>
+<td>通常被认为单位：<br />左侧&#x2F;右侧 0, 0宽度-1，顶部&#x2F;底部 0, 高度-1</td>
+</tr>
+</tbody></table>
+<h2 id="空间变换"><a href="#空间变换" class="headerlink" title="空间变换"></a>空间变换</h2><p>空间变换应该始终使用 <em><strong>X To Y</strong></em> 的命名格式。</p>
+<p><strong>示例：</strong></p>
+<ul>
+<li>WorldToView</li>
+<li>TranslatedWorldToView</li>
+<li>TangentToWorld</li>
+</ul>
+<h1 id="空间的投影变换"><a href="#空间的投影变换" class="headerlink" title="空间的投影变换"></a>空间的投影变换</h1><p>之前在初学Unity的时候，对空间的唯一认知就是确定一个Transform坐标。这次我们从图形学的角度来理解空间。</p>
+<p>一个数据表示的三维模型，显示到电脑屏幕的平面上，需要经过如下过程：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">    A[模型空间&lt;br&gt;Model/Object/Local Space] --&gt; B[模型变换矩阵&lt;br&gt;Model Matrix]</span><br><span class="line">    B --&gt; C[世界空间&lt;br&gt;World Space]</span><br><span class="line">    C --&gt; D[观察变换矩阵&lt;br&gt;View Matrix]</span><br><span class="line">    D --&gt; E[相机空间&lt;br&gt;Camera Space]</span><br><span class="line">    E --&gt; F[投影变换矩阵&lt;br&gt;Projection Matrix]</span><br><span class="line">    F --&gt; G[裁切空间&lt;br&gt;Clip Space]</span><br><span class="line">    G --&gt; H[屏幕空间&lt;br&gt;Screen Space]</span><br><span class="line">    B -.-&gt; I[MVP矩阵]</span><br><span class="line">    D -.-&gt; I</span><br><span class="line">    F -.-&gt; I</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这个MVP矩阵，就是用于计算一个集合阶段的顶点变换的矩阵，即：</p>
+<p>MVP矩阵 &#x3D; Projection矩阵 * View矩阵 * Model矩阵</p>
+<h1 id="几类空间的解释"><a href="#几类空间的解释" class="headerlink" title="几类空间的解释"></a>几类空间的解释</h1><p>推荐一个油管上的视频：<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=E6Srr-HaicI">View, World, Object, &amp; Tangent Space - Shader Graph Basics - Episode 10</a></p>
+<h3 id="模型-物体-本地空间-Model-Object-Local-Space"><a href="#模型-物体-本地空间-Model-Object-Local-Space" class="headerlink" title="模型&#x2F;物体&#x2F;本地空间 Model&#x2F;Object&#x2F;Local Space"></a>模型&#x2F;物体&#x2F;本地空间 Model&#x2F;Object&#x2F;Local Space</h3><p>模型&#x2F;物体&#x2F;本地，这三类叫法指的是同一空间。模型空间的坐标系原点是模型的原点。X,Y,Z三轴向量的方向和轴单位长度则以模型建模时为标准。</p>
+<p>就是旋转模型之后，跟着旋转的那个坐标系。</p>
+<h3 id="世界空间-World-Space"><a href="#世界空间-World-Space" class="headerlink" title="世界空间 World Space"></a>世界空间 World Space</h3><p>世界空间 是游戏引擎直接使用频率最高的空间。平时在gameplay逻辑代码中获取的物体绝对坐标就是世界空间系下物体的坐标。</p>
+<p>也就是旋转模型之后，始终保持原正交的坐标系。</p>
+<h3 id="相机-观察空间-Camera-View-Space"><a href="#相机-观察空间-Camera-View-Space" class="headerlink" title="相机&#x2F;观察空间 Camera&#x2F;View Space"></a>相机&#x2F;观察空间 Camera&#x2F;View Space</h3><p>相机&#x2F;观察空间的坐标系原点和轴向就是相机的位置和旋转轴向。但是有一点特殊，所有空间中只有相机&#x2F;观察空间是右手坐标系，其余的空间都是左手坐标系。</p>
+<p>在UE中的View Space和Camera Space是两个空间，View Space是相对Camera Space的，他在阴影通道的表现和Camera Space略有不同。</p>
+<h3 id="切线空间-Tangent-Space"><a href="#切线空间-Tangent-Space" class="headerlink" title="切线空间 Tangent Space"></a>切线空间 Tangent Space</h3><p>最抽象的一个空间，在Unity中甚至没有提及，在UE中额外提了一嘴。</p>
+<p>切线空间不像其它空间是宏观意义的坐标系。它是对面，点的坐标系。可以理解为每个点都有独立切线坐标系。</p>
+<p><img src="https://pica.zhimg.com/v2-8bd136ffdc67dd344b5092499ab3b2ba_1440w.jpg" alt="TS"></p>
+<p>图中红色方向是我们熟悉的法线，准确的说是这个面上某个像素的法线（Normal）。绿色的就是这个法线的切线（Tangent），蓝色的是正切线（Bitangent）。切线就是当前这个像素点的面或者顶点的切线，正切线就是法线和切线的叉乘结果向量，坐标系的3轴两两垂直。</p>
+<p>好，那么这玩意有个啥用？</p>
+<p>这个时候就要联想到游戏开发上了，模型除了网格，还有贴图啊！为了贴图，法线可就很重要了！所以切线空间就是为了法线而生的！</p>
+<p>模型Model的法线表现形式是模型数据在建模软件导出时赋予的，而模型软件在导出的时候不光给出了点面的法线方向，同时还给出了切线方向。而我们通过法线和切线向量的叉乘就得到了垂直于法线和切线构成的面的正切线向量。于是，切线空间坐标系就组装完成了。切线空间和模型空间一样，都是在模型数据决定的。模型空间是宏观的，模型所有点共用一个坐标系。而切线空间是微观的，所有点各自拥有一个坐标系。知道了切线空间的坐标系的构成，那就能实现其它空间和切线空间的转换。</p>
+<p>修改法线的意义，在于通过切线空间，我们可以实现在不增加模型顶点数量的情况下，增加模型表面的光照细节；也可以实现面上细节的层次叠加，如岩石上层分布苔藓等。</p>
+<p>比如一块平整的石头，它的法线肯定都是一个朝向，如果我通过切线空间修改了法线的方向，就能在视觉上产生坑坑洼洼的效果，尽管这块石头的网格、顶点、贴图都是同一个。说白了也就是通过代码实现更加有意思的效果。</p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by FurryMonster, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/计算机图形学/" class="tag">#计算机图形学</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        <a class="next"></a>
+        
+        <a href="/2024/11/06/%E4%B8%80%E6%AC%A1Avalonia%E5%91%BD%E4%BB%A4%E7%BB%91%E5%AE%9ABug/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">一次Avalonia命令绑定Bug</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/resume" class="item">Resume</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Projects</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/Furry-Monster/YouOnlyLockOncev1.0" class="item">YouOnlyLockOnce</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/Furry-Monster" class="item">GitHub</a>
+                
+                <a href="" class="item">CodePen</a>
+                
+                <a href="" class="item">Patreon</a>
+                
+                <a href="" class="item">Mastodon</a>
+                
+                <a href="" class="item">Discord</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 FurryMonster<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Vue重学计划（一） - Furry Monster的博客</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Vue重学计划（一） - Furry Monster的博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="http://furry-monster.github.io/2024/10/06/Vue%E9%87%8D%E5%AD%A6%E8%AE%A1%E5%88%92%EF%BC%88%E4%B8%80%EF%BC%89/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2024-10-06T13:54:08.000Z" />
+  
+  <meta property="og:article:author" content="FurryMonster" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+    <body
+        data-color-scheme="dark"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/Furry-Monster" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-codepen nav-item-icon" href="/" target="_blank" aria-label="CodePen">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-patreon nav-item-icon" href="/" target="_blank" aria-label="Patreon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-mastodon nav-item-icon" href="/" target="_blank" aria-label="Mastodon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-discord nav-item-icon" href="/" target="_blank" aria-label="Discord">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Vue3重学计划/">Vue3重学计划</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>October</span>
+            <span>6,</span>
+            <span>2024</span>
+        </div>
+        
+
+        <h1 class="title">Vue重学计划（一）</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p><del>经过了很久的深思熟虑</del>，突然就决定重新学一下Vue3了，这一次准备往更底层的方面研究一下，第一期就简单聊聊Vue的宏观架构方面的二次认知吧！（<del>其实只是太懒罢了</del>）</p>
+<h1 id="来自MVVM的伟力"><a href="#来自MVVM的伟力" class="headerlink" title="来自MVVM的伟力"></a>来自MVVM的伟力</h1><p>后端大多是MVC架构来写CURD，前端也有个架构，MVVM。最早接触MVVM是做.NET 8 的WPF项目的时候，那时候年少轻狂，妄想把MVC那一套套用在前端上，最后还是无奈求助网友，得知了MVVM这个用来绑定view（视图）和model（数据）的架构。</p>
+<p>MVVM（Model-View-ViewModel）架构：</p>
+<ol>
+<li>『View』：视图层（UI 用户界面）</li>
+<li>『ViewModel』：业务逻辑层（一切 js 可视为业务逻辑）</li>
+<li>『Model』：数据层（存储数据及对数据的处理如增删改查）</li>
+</ol>
+<p><img src="/Vue%E9%87%8D%E5%AD%A6%E8%AE%A1%E5%88%92%EF%BC%88%E4%B8%80%EF%BC%89/1728313215762.png" alt="1728313215762"></p>
+<p>除了MVC和MVVM，我在做游戏开发的时候还接触过ECS架构，这种架构与Unity的组织架构如出一辙，在实体上绑定组件，交互让系统来提供，对于交互性和实时性非常强的游戏开发来说，ECS是非常有效的一种架构。</p>
+<h1 id="响应式数据绑定"><a href="#响应式数据绑定" class="headerlink" title="响应式数据绑定"></a>响应式数据绑定</h1><p>在vue2中，实现双向数据绑定基于Object.defineProperties()实现</p>
+<p>而在vue3中，响应式的数据绑定采用了基于Proxy的拦截</p>
+<p>Vue 2 使用 getter &#x2F; setters 完全是出于支持旧版本浏览器的限制。而在 Vue 3 中则使用了 Proxy 来创建响应式对象，仅将 getter &#x2F; setter 用于 ref。</p>
+<p>这里面的实现涉及到包括但不限于状态机、信号处理等知识，可以参考<a target="_blank" rel="noopener" href="https://cn.vuejs.org/guide/extras/reactivity-in-depth.html">深入响应式系统 | Vue.js (vuejs.org)</a>深入了解，这里就只简单聊聊：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">vue2</span><br><span class="line">基于<span class="title class_">Object</span>.<span class="title function_">defineProperty</span>()实现</span><br><span class="line"> </span><br><span class="line">vue3 基于<span class="title class_">Proxy</span></span><br><span class="line">proxy与<span class="title class_">Object</span>.<span class="title function_">defineProperty</span>(obj, prop, desc)方式相比有以下优势：</span><br><span class="line"> </span><br><span class="line"><span class="comment">//丢掉麻烦的备份数据</span></span><br><span class="line"><span class="comment">//省去for in 循环</span></span><br><span class="line"><span class="comment">//可以监听数组变化</span></span><br><span class="line"><span class="comment">//代码更简化</span></span><br><span class="line"><span class="comment">//可以监听动态新增的属性；</span></span><br><span class="line"><span class="comment">//可以监听删除的属性 ；</span></span><br><span class="line"><span class="comment">//可以监听数组的索引和 length 属性；</span></span><br><span class="line"> </span><br><span class="line">    <span class="keyword">let</span> proxyObj = <span class="keyword">new</span> <span class="title class_">Proxy</span>(obj,&#123;</span><br><span class="line">        get : <span class="keyword">function</span> (<span class="params">target,prop</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> prop <span class="keyword">in</span> target ? target[prop] : <span class="number">0</span></span><br><span class="line">        &#125;,</span><br><span class="line">        set : <span class="keyword">function</span> (<span class="params">target,prop,value</span>) &#123;</span><br><span class="line">            target[prop] = <span class="number">888</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br></pre></td></tr></table></figure>
+
+<h1 id="虚拟DOM的优化"><a href="#虚拟DOM的优化" class="headerlink" title="虚拟DOM的优化"></a>虚拟DOM的优化</h1><p><strong>在Vue2中,每次更新diff,都是全量对比,Vue3则只对比带有标记的,这样大大减少了非动态内容的对比消耗</strong></p>
+<p><a target="_blank" rel="noopener" href="https://vue-next-template-explorer.netlify.app/" title="Vue Template Explorer">Vue Template Explorer</a> 我们可以通过这个网站看到静态标记</p>
+<p>patch flag 优化静态树</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">span</span>&gt;</span>Hello world!<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>Hello world!<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>Hello world!<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>Hello world!<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>&#123;&#123;msg&#125;&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>Hello world!<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>Hello world! <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>Vue3 编译后的 Vdom 是这个样子的</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">render</span>(<span class="params">_ctx，_cache，props，props，setup，data，data，options</span>)&#123;<span class="keyword">return</span> (<span class="title function_">_openBlock</span>(),<span class="title function_">_createBlock</span>(_Fragment,<span class="literal">null</span>，[</span><br><span class="line"><span class="title function_">_createvNode</span>( <span class="string">&quot;span&quot;</span>, <span class="literal">null</span>,<span class="string">&quot;Hello world ! &quot;</span>),</span><br><span class="line"><span class="title function_">_createvNode</span>( <span class="string">&quot;span&quot;</span>,<span class="literal">null</span>，<span class="string">&quot;Hello world! &quot;</span>),</span><br><span class="line"><span class="title function_">_createvNode</span>( <span class="string">&quot;span&quot;</span>，<span class="literal">null</span>，<span class="string">&quot;Hello world! &quot;</span>),</span><br><span class="line"><span class="title function_">_createvNode</span>( <span class="string">&quot;span&quot;</span>, <span class="literal">null</span>，<span class="string">&quot;Hello world! &quot;</span>),</span><br><span class="line"><span class="title function_">_createVNode</span>(<span class="string">&quot;span&quot;</span>, <span class="literal">null</span>，<span class="title function_">_toDisplaystring</span>(_ctx.<span class="property">msg</span>)，<span class="number">1</span><span class="comment">/* TEXT */</span>)，</span><br><span class="line"><span class="title function_">_createvNode</span>( <span class="string">&quot;span&quot;</span>, <span class="literal">null</span>，<span class="string">&quot;Hello world! &quot;</span>),</span><br><span class="line"><span class="title function_">_createvNode</span>( <span class="string">&quot;span&quot;</span>, <span class="literal">null</span>，<span class="string">&quot;Hello world! &quot;</span>)]，<span class="number">64</span><span class="comment">/*STABLE_FRAGMENT */</span>))</span><br></pre></td></tr></table></figure>
+
+<p>新增了 patch flag 标记</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable constant_">TEXT</span> = <span class="number">1</span> <span class="comment">// 动态文本节点</span></span><br><span class="line"><span class="variable constant_">CLASS</span>=<span class="number">1</span>&lt;&lt;<span class="number">1</span>,<span class="number">1</span> <span class="comment">// 2//动态class</span></span><br><span class="line"><span class="variable constant_">STYLE</span>=<span class="number">1</span>&lt;&lt;<span class="number">2</span>，<span class="comment">// 4 //动态style</span></span><br><span class="line"><span class="variable constant_">PROPS</span>=<span class="number">1</span>&lt;&lt;<span class="number">3</span>,<span class="comment">// 8 //动态属性，但不包含类名和样式</span></span><br><span class="line"><span class="title class_">FULLPR0PS</span>=<span class="number">1</span>&lt;&lt;<span class="number">4</span>,<span class="comment">// 16 //具有动态key属性，当key改变时，需要进行完整的diff比较。</span></span><br><span class="line"><span class="variable constant_">HYDRATE_</span> <span class="variable constant_">EVENTS</span> = <span class="number">1</span> &lt;&lt; <span class="number">5</span>，<span class="comment">// 32 //带有监听事件的节点</span></span><br><span class="line"><span class="variable constant_">STABLE</span> <span class="variable constant_">FRAGMENT</span> = <span class="number">1</span> &lt;&lt; <span class="number">6</span>, <span class="comment">// 64 //一个不会改变子节点顺序的fragment</span></span><br><span class="line"><span class="variable constant_">KEYED_</span> <span class="variable constant_">FRAGMENT</span> = <span class="number">1</span> &lt;&lt; <span class="number">7</span>, <span class="comment">// 128 //带有key属性的fragment 或部分子字节有key</span></span><br><span class="line"><span class="variable constant_">UNKEYED</span> <span class="variable constant_">FRAGMENT</span> = <span class="number">1</span>&lt;&lt; <span class="number">8</span>, <span class="comment">// 256 //子节点没有key 的fragment</span></span><br><span class="line"><span class="variable constant_">NEED</span> <span class="variable constant_">PATCH</span> = <span class="number">1</span> &lt;&lt; <span class="number">9</span>, <span class="comment">// 512 //一个节点只会进行非props比较</span></span><br><span class="line"><span class="variable constant_">DYNAMIC_SLOTS</span> = <span class="number">1</span> &lt;&lt; <span class="number">10</span> <span class="comment">// 1024 // 动态slot</span></span><br><span class="line"><span class="variable constant_">HOISTED</span> = -<span class="number">1</span> <span class="comment">// 静态节点</span></span><br><span class="line"><span class="variable constant_">BALL</span> = -<span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>我们发现创建动态 dom 元素的时候，Vdom 除了模拟出来了它的基本信息之外，还给它加了一个标记： 1 &#x2F;* TEXT *&#x2F;</p>
+<p>这个标记就叫做 patch flag（补丁标记）</p>
+<p>patch flag 的强大之处在于，当你的 diff 算法走到 _createBlock 函数的时候，会忽略所有的静态节点，只对有标记的动态节点进行对比，而且在多层的嵌套下依然有效。</p>
+<p>尽管 JavaScript 做 Vdom 的对比已经非常的快，但是 patch flag 的出现还是让 Vue3 的 Vdom 的性能得到了很大的提升，尤其是在针对大组件的时候。</p>
+<h1 id="应用TreeShaking的打包"><a href="#应用TreeShaking的打包" class="headerlink" title="应用TreeShaking的打包"></a>应用TreeShaking的打包</h1><p>简单来讲，就是在保持代码运行结果不变的前提下，去除无用的代码</p>
+<p>在Vue2中，无论我们使用什么功能，它们最终都会出现在生产代码中。主要原因是Vue实例在项目中是单例的，捆绑程序无法检测到该对象的哪些属性在代码中被使用到</p>
+<p>而Vue3源码引入tree shaking特性，将全局 API 进行分块。如果你不使用其某些功能，它们将不会包含在你的基础包中</p>
+<p>就是比如你要用watch 就是import {watch} from ‘vue’ 其他的computed 没用到就不会给你打包减少体积</p>
+<p><strong>具体可以参考我的其他博客</strong></p>
+<h1 id="组合式API"><a href="#组合式API" class="headerlink" title="组合式API"></a>组合式API</h1><p>之前看到有人喷后端Spring仔是配置文件高手，其实我想说，Vue2的写法也很像在写配置文件，可能鱿鱼须当年也认为这样子分块会使得代码很有条理吧。</p>
+<p><img src="https://user-images.githubusercontent.com/499550/62783026-810e6180-ba89-11e9-8774-e7771c8095d6.png" alt="API-COMP"></p>
+<p>确实，条理是有了，代码量和代码逻辑变得更加复杂了，所以我个人是更喜欢Vue3的组合式api的写法的.</p>
+<p>组合式API除了带来响应式API，更多的是提供了生命周期钩子和依赖注入，这有点类似于Unity的C#脚本，也许这种前端的工作本就应该朝着这样的方向进化和发展？</p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by FurryMonster, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/前端/" class="tag">#前端</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2024/10/06/TreeShaking%E6%8A%80%E6%9C%AF%E6%B3%9B%E8%B0%88/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">TreeShaking技术泛谈</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2024/09/26/hello-Stranger/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">Hello Stranger!</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/resume" class="item">Resume</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Projects</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/Furry-Monster/YouOnlyLockOncev1.0" class="item">YouOnlyLockOnce</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/Furry-Monster" class="item">GitHub</a>
+                
+                <a href="" class="item">CodePen</a>
+                
+                <a href="" class="item">Patreon</a>
+                
+                <a href="" class="item">Mastodon</a>
+                
+                <a href="" class="item">Discord</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 FurryMonster<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

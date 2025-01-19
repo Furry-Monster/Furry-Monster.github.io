@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Vue重学计划（二） - Furry Monster的博客</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Vue重学计划（二） - Furry Monster的博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="http://furry-monster.github.io/2024/10/07/Vue%E9%87%8D%E5%AD%A6%E8%AE%A1%E5%88%92%EF%BC%88%E4%BA%8C%EF%BC%89/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2024-10-07T14:04:43.000Z" />
+  
+  <meta property="og:article:author" content="FurryMonster" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+    <body
+        data-color-scheme="dark"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/Furry-Monster" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-codepen nav-item-icon" href="/" target="_blank" aria-label="CodePen">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-patreon nav-item-icon" href="/" target="_blank" aria-label="Patreon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-mastodon nav-item-icon" href="/" target="_blank" aria-label="Mastodon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-discord nav-item-icon" href="/" target="_blank" aria-label="Discord">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Vue3重学计划/">Vue3重学计划</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>October</span>
+            <span>7,</span>
+            <span>2024</span>
+        </div>
+        
+
+        <h1 class="title">Vue重学计划（二）</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>第二期，我们从比较<del>基础</del>的部分入手，来做一个深入的认知</p>
+<h1 id="Nodejs的源码结构"><a href="#Nodejs的源码结构" class="headerlink" title="Nodejs的源码结构"></a>Nodejs的源码结构</h1><p>提到基础，就不得不说这个伟大的Nodejs了，为啥说它伟大呢？</p>
+<blockquote>
+<p><strong>在JavaScript语言努力摆脱“玩具语言”这个标签的进化历程中，Node.js绝对能记下浓墨重彩的一笔。</strong> Node.js并不是一个用于实现具体功能的第三方工具库，而是JavaScript程序的运行环境。</p>
+</blockquote>
+<p>在Node.js出现之前，使用JavaScript语言编写的脚本需要在网页中被 <code>&lt;script&gt;</code>标签引用后才能执行，这就使得前端开发人员编写的程序无论怎么看都像是界面的一种附属品。 <strong>而Node.js的出现打破了这个枷锁</strong> ，它提供的运行时能够让JavaScript程序在桌面、命令行终端、手机、平板电脑甚至<strong>嵌入式系统</strong>上运行，这不仅极大地丰富了JavaScript的应用场景，也为后来的前端工程化发展和中间层架构模型的兴起奠定了基础。</p>
+<h2 id="Nodejs是什么？"><a href="#Nodejs是什么？" class="headerlink" title="Nodejs是什么？"></a>Nodejs是什么？</h2><blockquote>
+<p>Node.js是一个基于Chrome V8引擎的JavaScript运行环境。Node.js使用了一个事件驱动的、非阻塞式I&#x2F;O的模型，轻量又高效，它的底层是用C&#x2F;C++编写的。这是Node.js的官方描述，对前端开发人员来说，想要搞清楚其中所包含的“引擎”“运行环境”“事件驱动”以及“非阻塞I&#x2F;O模型”到底是什么意思，并不是一件容易的事情。</p>
+</blockquote>
+<p>要理解这段话和它背后的真正力量，我们需要把 Node.js 拆分到组件，了解它们的关键技术，如何交互协作，最终构成了 Node.js 这个强大的运行时环境：</p>
+<p><img src="/Vue%E9%87%8D%E5%AD%A6%E8%AE%A1%E5%88%92%EF%BC%88%E4%BA%8C%EF%BC%89/1728313069799.png" alt="1728313069799"></p>
+<p>它们是这样分工的：</p>
+<p><a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=MWhl/932Qfdc/d2nsfxM1w==.NpNMHIW68G85VeQTb2pVJYVR+76WIEx4lEh2iauvIsrUz+/QFq16aEfCNhrue2eu"><strong>V8</strong></a>：Google 开源的高性能 JavaScript 引擎，以 C++ 实现。这也是集成在 Chrome 中的 JS 引擎。V8 将你写的 JavaScript 代码编译为机器码（所以它超级快）然后执行。V8 有多快？看看<a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=85Hko9+RFa/PHvH6byDwBg==.cvVPo/vph0VGeFW2VswA+LxNCktK7Rs69h3hS0IjKjzHa7xF+RQ2u1dxAgOXmxC2">这个爆栈网的回答</a>。</p>
+<p><a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=slfyaTN7z1+COe+yH761uA==.WOb9nQmmJohdgx6Sj2+LjedEKBU+KTZqdgaxqcdjcKc="><strong>libuv</strong></a>：提供异步功能的 C 库。它在运行时负责一个事件循环（Event Loop）、一个线程池、文件系统 I&#x2F;O、DNS 相关和网络 I&#x2F;O，以及一些其他重要功能。</p>
+<p><a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=0kBZVWiXq2aOlCa2R4T2Tg==.ky0ULR0KXFBIyFMKIQLnkfFTMPcH6si7zNLwBBml15NTXk94ayOUxHV2TAZiiv8Q3ZDrF2NsFdlAnRw/KuIThQ=="><strong>其他 C&#x2F;C++ 组件和库</strong></a>：如 <a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=ljzvhrP4oxpKXqGuB/MTjw==.H+P8XnrlZDjyC6sXDHad1ZFmHLFY5QwnrzTo7VqIYEU=">c-ares</a>、<a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=sLZtgHX0oRJ1mjoA3g31Hw==.+/rNH9/qMc1MEj5sYCc3awBrN0yDxe8rrFUMJsGdHjM=">crypto (OpenSSL)</a>、<a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=wFIzBKRhoLqtd9Wy8NbsNQ==.B5uJaDqo+F29QTGd3xRroOEm5kD2rEHnA4IfrVypsjt9jjWQ/qCbOs8j8M59bqUN">http-parser</a> 以及 <a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=jh8FDMyJypJAtJdXiD5iWQ==.A5hQTM/Gaw5zRWE1dJQntOYG9A+NCTkCPz1W2YfPzSc=">zlib</a>。这些依赖提供了对系统底层功能的访问，包括网络、压缩、加密等。</p>
+<h2 id="架构方面的热门讨论"><a href="#架构方面的热门讨论" class="headerlink" title="架构方面的热门讨论"></a>架构方面的热门讨论</h2><p>在Stack Overflow上，关于这个架构有一个热门的讨论<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/36766696/which-is-correct-node-js-architecture/37512766#37512766">javascript - Which is correct Node.js architecture? - Stack Overflow</a></p>
+<p>Aren Li是这么认为的：</p>
+<p><img src="/Vue%E9%87%8D%E5%AD%A6%E8%AE%A1%E5%88%92%EF%BC%88%E4%BA%8C%EF%BC%89/1728313120917.png" alt="1728313120917"></p>
+<p>原文在此：<a target="_blank" rel="noopener" href="https://medium.com/yet-another-node-js-blog/architecture-of-node-js-internal-codebase-57cd8376b71f">Architecture of Node.js’ Internal Codebase | by Aren Yanqi Li | Yet Another Node.js Blog | Medium</a></p>
+<h1 id="Vite项目架构重点解读"><a href="#Vite项目架构重点解读" class="headerlink" title="Vite项目架构重点解读"></a>Vite项目架构重点解读</h1><h2 id="源码类文件"><a href="#源码类文件" class="headerlink" title="源码类文件"></a>源码类文件</h2><p>public 下面的不会被编译 可以存放静态资源</p>
+<p>assets 下面可以存放可编译的静态资源</p>
+<p>components 下面用来存放我们的组件</p>
+<p>App.vue 是全局组件</p>
+<p>main.ts 是全局的ts文件</p>
+<p><strong>index.html 一个有意思的入口文件</strong></p>
+<p>为什么说index.html是一个有意思的文件？用过纯Vue或者Vue-cli生成项目的朋友应该发现了，只有Vite生成的项目里面是自带这个html入口的</p>
+<p>Vite文档给出了解答：</p>
+<blockquote>
+<p>您可能已经注意到，在 Vite 项目中，<code>index.html</code> 是核心，而不是隐藏在 <code>public</code> 中。这是有意的：在开发过程中，Vite 是一个服务器，而 <code>index.html</code> 是您应用程序的入口点。</p>
+<p>Vite 将 <code>index.html</code> 视为源代码和模块图的一部分。它解析引用您的 JavaScript 源代码的 <code>&lt;script type=&quot;module&quot; src=&quot;...&quot;&gt;</code>。即使是内联 <code>&lt;script type=&quot;module&quot;&gt;</code> 和通过 <code>&lt;link href&gt;</code> 引用的 CSS 也能享受 Vite 特定的功能。此外，<code>index.html</code> 中的 URL 会自动重新定位，因此不需要特殊的 <code>%PUBLIC_URL%</code> 占位符。</p>
+<p>与静态 http 服务器类似，Vite 有一个“根目录”的概念，您的文件将从该目录提供服务。您将在本文档的其余部分中看到它被引用为 <code>&lt;root&gt;</code>。您源代码中的绝对 URL 将使用项目根目录作为基准进行解析，因此您可以像使用普通的静态文件服务器一样编写代码（但功能更强大！）。Vite 还能够处理解析到根目录之外的文件系统位置的依赖项，这使得它即使在基于单仓库的设置中也能使用。</p>
+<p>Vite 还支持具有多个 <code>.html</code> 入口点的 <a target="_blank" rel="noopener" href="https://vite.vuejs.ac.cn/guide/build#multi-page-app">多页面应用程序</a>。</p>
+</blockquote>
+<p>事实上，<strong>webpack，rollup 他们的入口文件都是enrty input 是一个js文件 而Vite 的入口文件是一个html文件，他刚开始不会编译这些js文件 只有当你用到的时候 如script src&#x3D;”xxxxx.js” 会发起一个请求被vite拦截这时候才会解析js文件</strong></p>
+<h2 id="配置类文件"><a href="#配置类文件" class="headerlink" title="配置类文件"></a>配置类文件</h2><p>vite config ts 等等后面再说。</p>
+<h1 id="npm-run-dev-指令"><a href="#npm-run-dev-指令" class="headerlink" title="npm run dev 指令"></a>npm run dev 指令</h1><p><strong>npm run dev</strong> 指令会再package.json中被解析成<strong>vite</strong>这个指令，这个vite其实就是启动vite 服务器的指令。</p>
+<p>那为什么我们不直接执行vite 命令不是更方便吗？</p>
+<p>这是因为在我们的电脑上面并没有配置过相关命令 所以无法直接执行,不信你可以在你的项目中输入vite，正常情况应该都不能执行，可以执行的都是自行配置过的</p>
+<p> 其实在我们执行npm install 的时候（包含vite） 会在node_modules&#x2F;.bin&#x2F; 创建好可执行文件</p>
+<p>.bin 目录，这个目录不是任何一个 npm 包。目录下的文件，表示这是一个个软链接，打开文件可以看到文件顶部写着 #!&#x2F;bin&#x2F;sh ，表示这是一个脚本</p>
+<p>在我们执行npm run xxx  npm 会通过软连接 查找这个软连接存在于源码目录node_modules&#x2F;vite</p>
+<p>所以npm run xxx 的时候，就会到 node_modules&#x2F;bin中找对应的映射文件，然后再找到相应的js文件来执行</p>
+<p>1.查找规则是先从当前项目的node_modlue &#x2F;bin去找,</p>
+<p>2.找不到去全局的node_module&#x2F;bin 去找</p>
+<p>3.再找不到 去环境变量去找</p>
+<p>至于node_modules&#x2F;.bin中的三个文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># unix Linux macOS 系默认的可执行文件，必须输入完整文件名</span></span><br><span class="line">vite</span><br><span class="line"> </span><br><span class="line"><span class="comment"># windows cmd 中默认的可执行文件，当我们不添加后缀名时，自动根据 pathext 查找文件</span></span><br><span class="line">vite.cmd</span><br><span class="line"> </span><br><span class="line"><span class="comment"># Windows PowerShell 中可执行文件，可以跨平台</span></span><br><span class="line">vite.psl</span><br></pre></td></tr></table></figure>
+
+<p>我们使用<strong>windows</strong> 一般执行的是第二个，而MacOS Linux 一般是第一个。</p>
+<p>详情可以参考：<a target="_blank" rel="noopener" href="https://xiaoman.blog.csdn.net/article/details/122771007">学习Vue3 第三章（Vite目录 &amp; Vue单文件组件 &amp; npm run dev 详解）_npm run dev vite-CSDN博客</a></p>
+<h1 id="比较罕见的几个vue模板指令"><a href="#比较罕见的几个vue模板指令" class="headerlink" title="比较罕见的几个vue模板指令"></a>比较罕见的几个vue模板指令</h1><blockquote>
+<p>Vue指令大全：</p>
+<p>v- 开头都是vue 的指令</p>
+<p>v-text 用来显示文本</p>
+<p>v-html 用来展示富文本</p>
+<p>v-if 用来控制元素的显示隐藏（切换真假DOM）</p>
+<p>v-else-if 表示 v-if 的“else if 块”。可以链式调用</p>
+<p>v-else v-if条件收尾语句</p>
+<p>v-show 用来控制元素的显示隐藏（display none block Css切换）</p>
+<p>v-on 简写@ 用来给元素添加事件</p>
+<p>v-bind 简写:  用来绑定元素的属性Attr</p>
+<p>v-model 双向绑定</p>
+<p>v-for 用来遍历元素</p>
+<p>v-on修饰符(.stop&#x2F;.once等等) 用于冒泡相关操作</p>
+<p>v-once 性能优化，只渲染一次</p>
+<p>v-memo 性能优化，会有缓存</p>
+</blockquote>
+<p>这里面，基本上没怎么用过的是v-once和v-memo，可以参考这篇文章：<a target="_blank" rel="noopener" href="https://juejin.cn/post/7180973915580137527">Vue3.2 新增 v-memo</a></p>
+<p>后面有机会也要自己试试嘞！</p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by FurryMonster, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/前端/" class="tag">#前端</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2024/10/08/%E8%81%8A%E8%81%8AVue%E7%9A%84diff%E7%AE%97%E6%B3%95/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">聊聊Vue的diff算法</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2024/10/06/TreeShaking%E6%8A%80%E6%9C%AF%E6%B3%9B%E8%B0%88/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">TreeShaking技术泛谈</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/resume" class="item">Resume</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Projects</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/Furry-Monster/YouOnlyLockOncev1.0" class="item">YouOnlyLockOnce</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/Furry-Monster" class="item">GitHub</a>
+                
+                <a href="" class="item">CodePen</a>
+                
+                <a href="" class="item">Patreon</a>
+                
+                <a href="" class="item">Mastodon</a>
+                
+                <a href="" class="item">Discord</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 FurryMonster<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Sass入门初步 - Furry Monster的博客</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Sass入门初步 - Furry Monster的博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="http://furry-monster.github.io/2024/10/12/Sass%E5%85%A5%E9%97%A8%E5%88%9D%E6%AD%A5/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2024-10-12T03:12:47.000Z" />
+  
+  <meta property="og:article:author" content="FurryMonster" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+    <body
+        data-color-scheme="dark"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/Furry-Monster" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-codepen nav-item-icon" href="/" target="_blank" aria-label="CodePen">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-patreon nav-item-icon" href="/" target="_blank" aria-label="Patreon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-mastodon nav-item-icon" href="/" target="_blank" aria-label="Mastodon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-discord nav-item-icon" href="/" target="_blank" aria-label="Discord">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+
+        
+        <div class="date" id="date">
+            <span>October</span>
+            <span>12,</span>
+            <span>2024</span>
+        </div>
+        
+
+        <h1 class="title">Sass入门初步</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>今天换个口味，做一下样式表</p>
+<h1 id="区分CSS，SCSS，SASS"><a href="#区分CSS，SCSS，SASS" class="headerlink" title="区分CSS，SCSS，SASS"></a>区分CSS，SCSS，SASS</h1><p>其实很长一段时间我都不知道SCSS和SASS为啥只需要安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install sass</span><br></pre></td></tr></table></figure>
+
+<p>之后就都可以使用了，后来才发现这俩只是一个东西的两个版本罢了。。。</p>
+<h3 id="一、CSS（Cascading-Style-Sheets）"><a href="#一、CSS（Cascading-Style-Sheets）" class="headerlink" title="一、CSS（Cascading Style Sheets）"></a>一、CSS（Cascading <a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=Style&spm=1001.2101.3001.7020">Style</a> Sheets）</h3><p>CSS 是一种用来描述 HTML 或 XML 文档外观和格式的样式表语言。它通过定义样式规则，来控制网页元素的呈现方式。CSS 语法相对简单，直接书写样式规则。每条规则包含选择器和一组声明，声明包括属性和值。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: Arial, sans-serif;</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#333</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">h1</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#444</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="二、SASS（Syntactically-Awesome-Stylesheets）"><a href="#二、SASS（Syntactically-Awesome-Stylesheets）" class="headerlink" title="二、SASS（Syntactically Awesome Stylesheets）"></a>二、SASS（Syntactically Awesome Stylesheets）</h3><p>Sass 是一个 CSS 预处理器，扩展了 CSS，添加了变量、嵌套规则、混入、继承等功能，增强了样式表的功能性和可维护性。Sass 有两种语法：缩进式语法（原始语法，文件扩展名为 <code>.sass</code>）和 SCSS 语法（CSS 超集，文件扩展名为 <code>.scss</code>）。</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$primary-color</span>: <span class="number">#333</span></span><br><span class="line"></span><br><span class="line">body</span><br><span class="line">  font-family: Arial, sans-serif</span><br><span class="line">  color: <span class="variable">$primary-color</span></span><br><span class="line"></span><br><span class="line">h1</span><br><span class="line">  color: <span class="built_in">darken</span>(<span class="variable">$primary-color</span>, <span class="number">10%</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="三、SCSS（Sassy-CSS）"><a href="#三、SCSS（Sassy-CSS）" class="headerlink" title="三、SCSS（Sassy CSS）"></a>三、SCSS（Sassy CSS）</h3><p>SCSS 是 Sass 的一种语法，是 CSS 的超集，这意味着所有有效的 CSS 代码在 SCSS 中同样有效。它结合了 CSS 的简单性和 Sass 的强大功能。SCSS 语法与 CSS 类似，但引入了 Sass 的所有高级功能，如变量、嵌套、混入、继承等。</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$primary-color</span>: <span class="number">#333</span>;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: Arial, sans-serif;</span><br><span class="line">  <span class="attribute">color</span>: <span class="variable">$primary-color</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">h1</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: <span class="built_in">darken</span>(<span class="variable">$primary-color</span>, <span class="number">10%</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="Bem架构"><a href="#Bem架构" class="headerlink" title="Bem架构"></a>Bem架构</h1><p>如今，有很多思想或者命名规范，例如：<a href="https://link.zhihu.com/?target=http://oocss.org/">OOCSS</a>, <a href="https://link.zhihu.com/?target=http://smacss.com/">SMACSS</a>, <a href="https://link.zhihu.com/?target=http://suitcss.github.io/">SUITCSS</a>, <a href="https://link.zhihu.com/?target=https://github.com/nemophrost/atomic-css">Atomic</a>， 还有<a href="https://link.zhihu.com/?target=http://getbem.com/introduction/">BEM</a>, 本文只讨论市面上比较流行的<strong>BEM</strong>规范，它由Yandex团队开发,其目标是帮助Developer更好的理解和抽象HTML和CSS之间的关系。</p>
+<p><strong>BEM</strong>由<strong>B</strong>lock(块),<strong>E</strong>lement(元素),<strong>M</strong>odifer(修饰符)三部分组成。假设你的网站由不同的模块(组件)组成，那么对应到BEM规范里面，你的组件名为Block, 每个组件里面有不同的子项为Element, 如果你的组件或者子项，有特定的状态或者行为来修饰组件或者<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=113447052&content_type=Article&match_order=3&q=%E5%AD%90%E9%A1%B9&zhida_source=entity">子项</a>，那么对应的是Modifer.下面会通过一些示例来讲解</p>
+<h3 id="1-1-Block-块"><a href="#1-1-Block-块" class="headerlink" title="1.1 Block(块)"></a>1.1 Block(块)</h3><p><strong>Block</strong>是你网站中的一个模块或者组件，假设你网站中由Header,Content, Sidebar, Footer组件组成，那么他们都是Block,需要注意的是Block 是CSS<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=113447052&content_type=Article&match_order=1&q=%E4%BD%9C%E7%94%A8%E5%9F%9F%E9%93%BE&zhida_source=entity">作用域链</a>的顶端。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">// HTML </span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;website&quot;</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">Header</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">Content</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">SideBar</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">Footer</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">// Header component</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;header&quot;</span>&gt;</span>Header<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">// Content component</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;content&quot;</span>&gt;</span>Content<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">// Sidebar component</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;sidebar&quot;</span>&gt;</span>Sidebar<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">// Footer component</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;footer&quot;</span>&gt;</span>Footer<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">// CSS</span><br><span class="line">.header &#123;</span><br><span class="line">    /* style * /</span><br><span class="line">&#125;</span><br><span class="line">.content &#123;</span><br><span class="line">    /* style * /</span><br><span class="line">&#125;</span><br><span class="line">.sidebar &#123;</span><br><span class="line">    /* style * /</span><br><span class="line">&#125;</span><br><span class="line">.footer &#123;</span><br><span class="line">    /* style * /</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-Element-元素"><a href="#1-2-Element-元素" class="headerlink" title="1.2 Element(元素)"></a>1.2 Element(元素)</h3><p><strong>Element</strong>代表的是<strong>Block</strong>中某一个特定的项，它通过 __ 与连接Block, “__”的意义是声明Element与Block之间的父子关系，例如Content 组件里面包含一个form 表单，包含一些描述信息的段落，等等。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// HTML</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;content&quot;</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">form</span> <span class="attr">className</span>=<span class="string">&quot;content__form&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">p</span> <span class="attr">className</span>=<span class="string">&quot;content__description&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;content__item&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">//CSS</span><br><span class="line">.content__form&#123;&#125; //表达的意思是content 下的form</span><br><span class="line">.content__description&#123;&#125; //表达的意思是content 下的description</span><br><span class="line">.content__item&#123;&#125; //表达的意思是content 下的item</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-Modifier-修饰符"><a href="#1-3-Modifier-修饰符" class="headerlink" title="1.3 Modifier(修饰符)"></a>1.3 Modifier(修饰符)</h3><p><strong>Modifier</strong>是用来描述<strong>Block</strong>或者<strong>Element</strong>的变体。它用”–”与<strong>Block</strong>或者<strong>Element</strong>连接，例如我们的Button 组件，它有很多的状态和外观，例如selected,default,disabled,按钮的颜色可能有green,red,orange.这些都属于Modifier.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//HTML</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;button button--&#123;props.theme&#125; button--&#123;props.status&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">//CSS</span><br><span class="line">.button--default&#123;&#125;</span><br><span class="line">.button--selected&#123;&#125;</span><br><span class="line">.button--disabled&#123;&#125;</span><br><span class="line">.button--green&#123;&#125;</span><br><span class="line">.button--red&#123;&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>BEM 由 Block, Element, Mdifier 三部分组成。每个部分描述不同的意义。Elment 通过”__” 于 Block连接，它声明了父子关系。Modifier 通过”–”与Block或者Element连接，用来描述作用者的状态或者行为。</p>
+<p> <strong>优点</strong> :</p>
+<ul>
+<li>“__”描述元素父子关系</li>
+<li>减少CSS层级嵌套问题</li>
+<li>CSS与HTML的映射关系</li>
+<li>类名合乎逻辑且直观</li>
+<li>给团队提供了一种声明式语法</li>
+</ul>
+<p><strong>缺点</strong></p>
+<ul>
+<li>额外的学习成本</li>
+<li>类名变的更长</li>
+<li>Block的抽象至关重要</li>
+</ul>
+<h1 id="使用SCSS实现Bem架构"><a href="#使用SCSS实现Bem架构" class="headerlink" title="使用SCSS实现Bem架构"></a>使用SCSS实现Bem架构</h1><p>在vite项目中创建一个 <code>bem.scss</code>文件：</p>
+<p>bem.scss</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//命名空间</span></span><br><span class="line"><span class="variable">$namespace</span>: <span class="string">&quot;bem&quot;</span> !default;</span><br><span class="line"></span><br><span class="line"><span class="comment">//选择器 规则</span></span><br><span class="line"><span class="variable">$block-sel</span>: <span class="string">&quot;-&quot;</span> !default;</span><br><span class="line"><span class="variable">$elem-sel</span>: <span class="string">&quot;__&quot;</span> !default;</span><br><span class="line"><span class="variable">$mod-sel</span>: <span class="string">&quot;--&quot;</span> !default;</span><br><span class="line"></span><br><span class="line"><span class="comment">//css清除覆盖</span></span><br><span class="line"><span class="keyword">@mixin</span> bfc&#123;</span><br><span class="line">  <span class="attribute">height</span>:<span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">overflow</span>:hidden;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//块 混合器</span></span><br><span class="line"><span class="keyword">@mixin</span> b(<span class="variable">$block</span>) &#123;</span><br><span class="line">  <span class="variable">$B</span>: #&#123;<span class="variable">$namespace</span> + <span class="variable">$block-sel</span> + <span class="variable">$block</span>&#125;;</span><br><span class="line">  .#&#123;<span class="variable">$B</span>&#125; &#123;</span><br><span class="line">    <span class="keyword">@content</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//元素 混合器</span></span><br><span class="line"><span class="keyword">@mixin</span> e(<span class="variable">$el</span>) &#123;</span><br><span class="line">  <span class="variable">$selector</span>: &amp;;</span><br><span class="line">  <span class="keyword">@at-root</span> &#123;</span><br><span class="line">    #&#123;<span class="variable">$selector</span> + <span class="variable">$elem-sel</span> + <span class="variable">$el</span>&#125; &#123;</span><br><span class="line">      <span class="keyword">@content</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//修饰 混合器</span></span><br><span class="line"><span class="keyword">@mixin</span> m(<span class="variable">$m</span>) &#123;</span><br><span class="line">  <span class="variable">$selector</span>: &amp;;</span><br><span class="line">  <span class="keyword">@at-root</span> &#123;</span><br><span class="line">    #&#123;<span class="variable">$selector</span> + <span class="variable">$mod-sel</span> + <span class="variable">$m</span>&#125; &#123;</span><br><span class="line">      <span class="keyword">@content</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>咋使用呢？参考这个例子：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;bem-menu&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Menu<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;bem-menu__list&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">&quot;bem-menu__ul&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">&quot;bem-menu__item&quot;</span>&gt;</span>Home<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">&quot;bem-menu__item&quot;</span>&gt;</span>About<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">&quot;bem-menu__item&quot;</span>&gt;</span>Contact<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; ref, reactive &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">lang</span>=<span class="string">&quot;scss&quot;</span> <span class="attr">scoped</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css"><span class="keyword">@include</span> b(menu) &#123;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">min-width</span>: <span class="number">300px</span>;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">border-right</span>: <span class="number">1px</span> solid <span class="number">#ccc</span>;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">height</span>: <span class="number">100%</span>;</span></span><br><span class="line"><span class="language-css"></span></span><br><span class="line"><span class="language-css">    <span class="keyword">@include</span> e(list)&#123;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">height</span>: <span class="number">100%</span>;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">overflow-y</span>: auto;</span></span><br><span class="line"><span class="language-css">    &#125;</span></span><br><span class="line"><span class="language-css"></span></span><br><span class="line"><span class="language-css">    <span class="keyword">@include</span> e(ul)&#123;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">list-style</span>: none;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">margin</span>: <span class="number">0</span>;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">padding</span>: <span class="number">0</span>;</span></span><br><span class="line"><span class="language-css">    &#125;</span></span><br><span class="line"><span class="language-css"></span></span><br><span class="line"><span class="language-css">    <span class="keyword">@include</span> e(item)&#123;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">padding</span>: <span class="number">10px</span>;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">cursor</span>: pointer;</span></span><br><span class="line"><span class="language-css">        <span class="attribute">transition</span>: background-color <span class="number">0.3s</span> ease;</span></span><br><span class="line"><span class="language-css"></span></span><br><span class="line"><span class="language-css">        &amp;<span class="selector-pseudo">:hover</span>&#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background-color</span>: <span class="number">#f5f5f5</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">    &#125;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="自顶向下认识SCSS"><a href="#自顶向下认识SCSS" class="headerlink" title="自顶向下认识SCSS"></a>自顶向下认识SCSS</h1><p>从上面的例子可以发现scss几个基本的功能：</p>
+<h3 id="一、嵌套CSS"><a href="#一、嵌套CSS" class="headerlink" title="一、嵌套CSS"></a>一、嵌套CSS</h3><p>可以看到我们用@include的时候，@include里面也可以用@include，也就是说，css可以按照树形结构进行嵌套。</p>
+<p>原版css中是这样的：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-id">#content</span> <span class="selector-tag">article</span> <span class="selector-tag">h1</span> &#123; <span class="attribute">color</span>: <span class="number">#333</span> &#125;</span><br><span class="line"><span class="selector-id">#content</span> <span class="selector-tag">article</span> <span class="selector-tag">p</span> &#123; <span class="attribute">margin-bottom</span>: <span class="number">1.4em</span> &#125;</span><br><span class="line"><span class="selector-id">#content</span> <span class="selector-tag">aside</span> &#123; <span class="attribute">background-color</span>: <span class="number">#EEE</span> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>scss中可以这样写：</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-id">#content</span> &#123;</span><br><span class="line">  <span class="selector-tag">article</span> &#123;</span><br><span class="line">    <span class="selector-tag">h1</span> &#123; <span class="attribute">color</span>: <span class="number">#333</span> &#125;</span><br><span class="line">    <span class="selector-tag">p</span> &#123; <span class="attribute">margin-bottom</span>: <span class="number">1.4em</span> &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="selector-tag">aside</span> &#123; <span class="attribute">background-color</span>: <span class="number">#EEE</span> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="二、模块化导入"><a href="#二、模块化导入" class="headerlink" title="二、模块化导入"></a>二、模块化导入</h3><blockquote>
+<p><code>css</code>有一个特别不常用的特性，即 <code>@import</code>规则，它允许在一个 <code>css</code>文件中导入其他 <code>css</code>文件。然而，后果是只有执行到 <code>@import</code>时，浏览器才会去下载其他 <code>css</code>文件，这导致页面加载起来特别慢。</p>
+<p><code>sass</code>也有一个 <code>@import</code>规则，但不同的是，<code>sass</code>的 <code>@import</code>规则在生成 <code>css</code>文件时就把相关文件导入进来。这意味着所有相关的样式被归纳到了同一个 <code>css</code>文件中，而无需发起额外的下载请求。另外，所有在被导入文件中定义的变量和混合器（参见2.5节）均可在导入文件中使用。</p>
+</blockquote>
+<h3 id="三、混合器mixer"><a href="#三、混合器mixer" class="headerlink" title="三、混合器mixer"></a>三、混合器mixer</h3><p>一个这样的混合器</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@mixin</span> rounded-corners &#123;</span><br><span class="line">  -moz-<span class="attribute">border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">  -webkit-<span class="attribute">border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以这样使用：</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">notice &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: green;</span><br><span class="line">  <span class="attribute">border</span>: <span class="number">2px</span> solid <span class="number">#00aa00</span>;</span><br><span class="line">  <span class="keyword">@include</span> rounded-corners;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//编译后：</span></span><br><span class="line"><span class="selector-class">.notice</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: green;</span><br><span class="line">  <span class="attribute">border</span>: <span class="number">2px</span> solid <span class="number">#00aa00</span>;</span><br><span class="line">  -moz-<span class="attribute">border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">  -webkit-<span class="attribute">border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>除此之外，还有其他的特性，在这里就不做介绍了，这里只介绍简单的开发能用上的一些特性。</p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by FurryMonster, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/前端/" class="tag">#前端</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2024/10/16/Java%E6%96%B0%E7%89%B9%E6%80%A7%E6%97%A5%E5%BF%97%E2%80%94%E2%80%94Java%208/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">Java新特性日志——Java 8</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2024/10/11/Vue%E9%87%8D%E5%AD%A6%E8%AE%A1%E5%88%92%EF%BC%88%E4%BA%94%EF%BC%89/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">Vue重学计划（五）</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/resume" class="item">Resume</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Projects</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/Furry-Monster/YouOnlyLockOncev1.0" class="item">YouOnlyLockOnce</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/Furry-Monster" class="item">GitHub</a>
+                
+                <a href="" class="item">CodePen</a>
+                
+                <a href="" class="item">Patreon</a>
+                
+                <a href="" class="item">Mastodon</a>
+                
+                <a href="" class="item">Discord</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 FurryMonster<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

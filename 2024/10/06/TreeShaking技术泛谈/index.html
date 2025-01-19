@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>TreeShaking技术泛谈 - Furry Monster的博客</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="TreeShaking技术泛谈 - Furry Monster的博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="http://furry-monster.github.io/2024/10/06/TreeShaking%E6%8A%80%E6%9C%AF%E6%B3%9B%E8%B0%88/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2024-10-06T14:13:38.000Z" />
+  
+  <meta property="og:article:author" content="FurryMonster" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+    <body
+        data-color-scheme="dark"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/Furry-Monster" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-codepen nav-item-icon" href="/" target="_blank" aria-label="CodePen">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-patreon nav-item-icon" href="/" target="_blank" aria-label="Patreon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-mastodon nav-item-icon" href="/" target="_blank" aria-label="Mastodon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-discord nav-item-icon" href="/" target="_blank" aria-label="Discord">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+
+        
+        <div class="date" id="date">
+            <span>October</span>
+            <span>6,</span>
+            <span>2024</span>
+        </div>
+        
+
+        <h1 class="title">TreeShaking技术泛谈</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <h1 id="发源"><a href="#发源" class="headerlink" title="发源"></a>发源</h1><p>Tree-shaking 这一术语在前端社区内，起初是 <a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=a9sEtaJrGvQZLMaXxUSlXQ==.iGjYfWsubiyid367c3gVzcd57dVW35aQSB0Bz5u5wZI=" title="Rich Harris">Rich Harris</a> 在 Rollup 中提出。简单概括起来，Tree-shaking 可以使得项目最终构建（Bundle）结果中只包含你实际需要的代码。</p>
+<p><img src="/TreeShaking%E6%8A%80%E6%9C%AF%E6%B3%9B%E8%B0%88/1728313255298.png" alt="1728313255298"></p>
+<p>而且，说到 Tree-shaking，不难免提及 Dead Code Elimination，相信很多同学在一些关于 Tree-shaking 的文章中都会看到诸如这样的描述：Tree-shaking 是一项 Dead Code Elimination（以下统称 DCE）技术。</p>
+<p>那么，既然有了 DCE 这一术语，为什么又要造一个 Tree-shaking 术语？存在既有价值，下面，让我们一起来看看 Rich Harris 是如何回答这个问题的</p>
+<h1 id="1-DCE-vs-Tree-Shaking"><a href="#1-DCE-vs-Tree-Shaking" class="headerlink" title="1. DCE vs. Tree-Shaking"></a>1. DCE vs. Tree-Shaking</h1><p>在当时 Rich Haris 针对这一提问专门写了这篇文章<a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=Vlfq3PO2dcK/NJzTbd/a7w==.wxtSXtOWIByS4OQ4lowXE2PH8cml/PzyV3WWck18zT9rTwLg8EejE+QAWFkLGwzqc3ImYA9Y+vTUH7fELHwbugFRGeLbv4BC47Tbowb24rsHctDa6S9ibe1KlWlzMKaU" title="《Tree-shaking versus dead code elimination》">《Tree-shaking versus dead code elimination》</a>，文中表示 DCE 和 Tree-shaking 最终的目标是一致的（更少的代码），但是它们仍然是存在区别的。</p>
+<p>Rich Haris 举了个做蛋糕的例子，指出 DCE 就好比在做蛋糕的时候直接把鸡蛋放入搅拌，最后在做好的蛋糕中取出蛋壳，这是不完美的做法，而 Tree-shaking 则是在做蛋糕的时候只放入我想要的东西，即不会把蛋壳放入搅拌制作蛋糕。</p>
+<p>因此，Tree-shaking 表达的不是指消除 Dead Code，而是指保留 Live Code。即使最终 DCE 和 Tree-shaking 的结果是一致的，但是由于 JavaScript 静态分析的局限性，实际过程并不同。并且，包含有用的代码可以得到更好的结果，从表面看（做蛋糕的例子）这也是一种更符合逻辑的方法。</p>
+<p>此外，当时 Rich Haris 也认为 Tree-shaking 可能不是一个很好的名称，考虑过用 Live Code Inclusion 这个短语来表示，但是似乎会造成更多的困惑……让我们看一下 Rich Haris 的原话：</p>
+<blockquote>
+<p>I thought about using the ‘live code inclusion’ phrase with Rollup, but it seemed that I’d just be adding even more confusion seeing as tree-shaking is an existing concept. Maybe that was the wrong decision?</p>
+</blockquote>
+<p>所以，我想到这里同学们应该清楚一点，Tree-shaking 和 DCE 只是最终的结果 <strong>是一致的</strong> ，但是 2 者 <strong>实现的过程不同</strong> ，Tree-shaking 是保留 Live Code，而 DCE 是消除 Dead Code。</p>
+<p>并且，当时 Rich Harris 也指出 Rollup 也不是完美的，最好的结果是使用 Rollup + Uglify 的方式。不过，显然现在的 Rollup <code>v2.55.1</code> 已经臻至完美。那么，接下来让我们沿着时间线看看 Tree-shaking 的演变</p>
+<h1 id="2-Tree-Shaking的演化"><a href="#2-Tree-Shaking的演化" class="headerlink" title="2.Tree-Shaking的演化"></a>2.Tree-Shaking的演化</h1><p>Tree-shaking  <strong>在最初被提出的时候它只会做一件事</strong> ，那就是利用 ES Module 静态导入的特点来检测模块内容的导出、导入以及被使用的情况，从而实现保留 Live Code 的目的。</p>
+<p>也许这个时候你会问 Tree-shaking 不是还会消除 Dead Code 吗？确实，但是也不一定，如果你使用的是现在的 Rollup <code>v2.55.1</code>，它是会进行 DCE，即消除 Dead Code。但是，如果你用的是 Webpack 的话，那就是另一番情况了，它需要使用 Uglify 对应的插件来实现 DCE。</p>
+<p>下面，我们以 Rollup 为例，聊聊过去和现在的 Tree-shaking。</p>
+<h3 id="2-1过去的-Tree-shaking"><a href="#2-1过去的-Tree-shaking" class="headerlink" title="2.1过去的 Tree-shaking"></a>2.1过去的 Tree-shaking</h3><p>在早期， Rollup 提出和支持 Tree-shaking 的时候，它并不会做额外的 DCE，这也可以在 15 年 Rich Haris 写的那篇文章中看出，当时他也提倡大家使用 Rollup + Uglify。所以，这里让我们一起把<strong>时间倒回</strong> Rollup <code>v0.10.0</code> 的 Tree-shaking。</p>
+<p>回到 Rollup <code>v0.10.0</code> 版本，你会发现非常有趣的一点，就是它的 GitHub README 介绍是这样的：</p>
+<p><img src="/TreeShaking%E6%8A%80%E6%9C%AF%E6%B3%9B%E8%B0%88/1728313265262.png" alt="1728313265262"></p>
+<p>Rollup 的命名来源于一首名为《Roll up》的说唱歌曲，我想这应该出乎了很多同学的意料。不过话说 Evan You 也喜欢说唱，然后我（你）也喜欢说唱，所以这也许可以论证我（你）选择前端似乎没错？这里附上这首歌，你可以选择听这首歌来拉近 Rollup 的距离。</p>
+<blockquote>
+<p>传送门：<a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=fq6Q+XC+/UwjejTNfN6YbQ==.CFK9bUF4j6I2V6mZzFW1brk7xofDUyNFlAuHxIPwr/1psgQNEMZ765uhLFbJM1eS">https://www.youtube.com/watch...</a></p>
+</blockquote>
+<p>下面，我们使用 Rollup <code>v0.10.0</code> 版本来做一个简单示例来验证一下前面说的。并且，在这个过程中需要注意，如果你的 Node 版本过高会导致一些不兼容，所以建议用 Node <code>v11.15.0</code> 来运行下面的例子。</p>
+<p>首先，初始化项目和安装基础的依赖：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm init -y</span><br><span class="line">npm i rollup@0.10.0 -D</span><br></pre></td></tr></table></figure>
+
+<p>然后，分别新建 3 个文件：</p>
+<p>utils.js</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">export const foo = function () &#123;</span><br><span class="line">  console.log(&quot;foo&quot;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">export const bar = function () &#123;</span><br><span class="line">  console.log(&quot;bar&quot;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>main.js</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import &#123; foo, bar &#125; from &quot;./utils.js&quot;;</span><br><span class="line"></span><br><span class="line">const unused = &quot;a&quot;;</span><br><span class="line"></span><br><span class="line">foo();</span><br></pre></td></tr></table></figure>
+
+<p>index.js</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">const rollup = require(&quot;rollup&quot;);</span><br><span class="line"></span><br><span class="line">rollup</span><br><span class="line">  .rollup(&#123;</span><br><span class="line">    entry: &quot;main.js&quot;,</span><br><span class="line">  &#125;)</span><br><span class="line">  .then(async (bundle) =&gt; &#123;</span><br><span class="line">    bundle.write(&#123;</span><br><span class="line">      dest: &quot;bundle.js&quot;,</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>其中，<code>main.js</code> 是构建的入口文件，然后 <code>index.js</code> 负责使用 Rollup 进行构建，它会将最终的构建结果写入到 <code>bundle.js</code> 文件中：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// bundle.js</span><br><span class="line">const foo = function () &#123;</span><br><span class="line">  console.log(&quot;foo&quot;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">const unused = &quot;a&quot;;</span><br><span class="line"></span><br><span class="line">foo();</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，在 <code>bundle.js</code> 中<strong>保留了</strong> <code>utils.js</code> 中的 <code>foo()</code> 函数（因为被调用了），而导入的 <code>uitls.js</code> 中的 <code>bar()</code> 函数（没有被调用）则 <strong>不会保留</strong> ，并且定义的变量 <code>ununsed</code> 虽然没有被使用，但是仍然保留了下来。</p>
+<p>所以，通过这么一个小的示例，我们可以验证得知 Rollup 的 Tree-shaking 最初并不支持 DCE，它仅仅 <strong>只是在构建结果中保留你导入的模块中需要的代码</strong> 。</p>
+<h3 id="2-2-现在的-Tree-shaking"><a href="#2-2-现在的-Tree-shaking" class="headerlink" title="2.2 现在的 Tree-shaking"></a>2.2 现在的 Tree-shaking</h3><p>前面，我们从过去的 Tree-shaking 开始了解，大致建立起了对 Tree-shaking 的初印象。这里我们来看一下现在 Rollup 官方上对 <a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=tquxYSLxgo9Yw/rINTURPg==.jzcCcd0hL+jHNHoCwAvIeGJ6/MRNRqklb7oci5qCaEmYYPrGt2RSxzoanZDorzvTk/o2rByX7tkt7yPTodRJUQ==" title="Tree-shaking">Tree-shaking</a> 的介绍：</p>
+<blockquote>
+<p>Tree-shaking，也被称为 Live Code Inclusion，是指 Rollup 消除项目中实际未使用的代码的过程，它是一种 Dead Code Elimination 的方式，但是在输出方面会比其他方法更有效。该名称源自模块的抽象语法树（Abstract Sytanx Tree）。该算法首先会标记所有相关的语句，然后通过摇动语法树来删除所有的 Dead Code。它在思想上类似于 GC（Garbage Collection）中的标记清除算法。尽管， <strong>该算法不限于 ES Module</strong> ，但它们使其效率更高，因为它允许 Rollup 将所有模块一起视为具有共享绑定的大抽象语法树。</p>
+</blockquote>
+<p>从这段话，我们可以很容易地发现随着时间的推移，Rollup 对 Tree-shaking 的定义已经不仅仅是 ES Module 相关，此外它还支持了 DCE。所以，有时候我们看到一些文章介绍 Tree-shaking 实现会是这样：</p>
+<ul>
+<li>利用 <strong>ES Module 可以进行静态分析</strong>的特点来检测模块内容的导出、导入以及被使用的情况，保留 Live Code</li>
+<li>消除<strong>不会被执行</strong>和<strong>没有副作用（Side Effect）</strong> 的 Dead Code，即 DCE 过程</li>
+</ul>
+<p>那么，在前面我们已经知道 Tree-shaking 基于 ES Module 静态分析的特点会做的事情。所以，这里我们来仔细看一下第 2 点，换个角度看，它指的是当代码 <strong>没有被执行</strong> ，但是它会 <strong>存在副作用</strong> ，这个时候 Tree-shaking 就不会把这部分代码消除。</p>
+<p>那么，显然对副作用建立良好的认知，可以让项目中代码能更好地被 Tree-shaking。所以，下面让我们来通过一个简单的例子来认识一下副作用。</p>
+<h4 id="2-2-1-副作用（Side-Effect）"><a href="#2-2-1-副作用（Side-Effect）" class="headerlink" title="2.2.1 副作用（Side Effect）"></a>2.2.1 副作用（Side Effect）</h4><p>在 Wiki 上对<a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=I+sgF6ijTuV2fmvMV8/Mzw==.5laAzty3OfJk8bh7S93itAk1lLGpWsG1q5NyBO52zmELfUpvPWZxjtFw4BydoikR" title="副作用（Side Effect）">副作用（Side Effect）</a>做出的介绍：</p>
+<blockquote>
+<p>在计算机科学中，如果操作、函数或表达式在其本地环境之外修改某些状态变量值，则称其具有副作用。</p>
+</blockquote>
+<p>把这段话转换成我们熟悉的，它指的是当你修改了<strong>不包含在当前作用域</strong>的某些变量值的时候，则会产生副作用。这里我们把上面的例子稍作修改，把 <code>sayHi()</code> 函数的形参删掉，改为直接访问定义好的 <code>name</code> 变量：</p>
+<p>utils.js</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> name = <span class="string">&quot;wjc&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> sayHi = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`Hi <span class="subst">$&#123;name&#125;</span>`</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>main.js</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; sayHi &#125; <span class="keyword">from</span> <span class="string">&quot;./maths.js&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="title function_">sayHi</span>();</span><br></pre></td></tr></table></figure>
+
+<p>然后，我们把这个例子通过 Rollup 提供的<a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=xrpu8YB821h8Xhk8D+56Fg==.Lr+RX1NGa5n/76jKTrdZcstb4PALEzPyhjIpc2TQ1QA=" title="REPL"> REPL</a> 来 Tree-shaking 一下，输出的结果会是这样：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> name = <span class="string">&quot;wjc&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> sayHi = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`Hi <span class="subst">$&#123;name&#125;</span>`</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="title function_">sayHi</span>();</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，这里我们并没有直接导入 <code>utils.js</code> 文件中的 <code>name</code> 变量，但是由于在 <code>sayHi()</code> 函数中访问了它作用域之外的变量 <code>name</code>，产生了副作用，所以最后输出的结果也会有 <code>name</code> 变量。</p>
+<p>当然，这仅仅只是一个非常简单的产生副作用的场景，也是很多同学不会犯的错误。此外，一个很有趣的场景就是使用 <code>Class</code> 关键字声明的类经过 Babel 转换为 ES5 的代码（为了保证 <code>Class</code> 可枚举）后会产生副作用。</p>
+<blockquote>
+<p>对上面提到的这个问题感兴趣的同学，可以看这篇文章 <a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=alIevwDquWyYBjENmlL5aA==.GpBYLIBHNWWW+2w4N9nJmnIzFygC0cWc2vI91jLQtukhG39zXuuNgtaJQjH/oxEF" title="你的 Tree-Shaking 并没什么用">你的 Tree-Shaking 并没什么用</a> 仔细了解，这里就不做重复论述了</p>
+</blockquote>
+<h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>通过对比 2015 年 Rich Harris 在提出 Tree-shaking 的初衷，到现在 Tree-shaking 所具备的能力来说，随着时间的演变 Rollup 的 Tree-shaking 默认也支持了 DCE，这也难免会造成一些人（包括我）对 Tree-shaking 的理解产生混乱。所以，如果想要追溯本源（Tree-shaking 由来），推荐仔细阅读一下《Tree-shaking versus dead code elimination》这篇文章。</p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by FurryMonster, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/前端/" class="tag">#前端</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2024/10/07/Vue%E9%87%8D%E5%AD%A6%E8%AE%A1%E5%88%92%EF%BC%88%E4%BA%8C%EF%BC%89/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">Vue重学计划（二）</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2024/10/06/Vue%E9%87%8D%E5%AD%A6%E8%AE%A1%E5%88%92%EF%BC%88%E4%B8%80%EF%BC%89/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">Vue重学计划（一）</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/resume" class="item">Resume</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Projects</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/Furry-Monster/YouOnlyLockOncev1.0" class="item">YouOnlyLockOnce</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/Furry-Monster" class="item">GitHub</a>
+                
+                <a href="" class="item">CodePen</a>
+                
+                <a href="" class="item">Patreon</a>
+                
+                <a href="" class="item">Mastodon</a>
+                
+                <a href="" class="item">Discord</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 FurryMonster<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

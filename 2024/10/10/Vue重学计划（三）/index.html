@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Vue重学计划（三） - Furry Monster的博客</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Vue重学计划（三） - Furry Monster的博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="http://furry-monster.github.io/2024/10/10/Vue%E9%87%8D%E5%AD%A6%E8%AE%A1%E5%88%92%EF%BC%88%E4%B8%89%EF%BC%89/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2024-10-10T11:20:53.000Z" />
+  
+  <meta property="og:article:author" content="FurryMonster" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+    <body
+        data-color-scheme="dark"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/Furry-Monster" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-codepen nav-item-icon" href="/" target="_blank" aria-label="CodePen">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-patreon nav-item-icon" href="/" target="_blank" aria-label="Patreon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-mastodon nav-item-icon" href="/" target="_blank" aria-label="Mastodon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-discord nav-item-icon" href="/" target="_blank" aria-label="Discord">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Vue3重学计划/">Vue3重学计划</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>October</span>
+            <span>10,</span>
+            <span>2024</span>
+        </div>
+        
+
+        <h1 class="title">Vue重学计划（三）</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>这周因为学校的事太多，耽误了好久，花了一天把Vue3的响应式数据整理了一下。</p>
+<p><del>感觉太迷茫了，现在就是在岔路口做决策，摇摆不定了。。。</del></p>
+<p>不知道咋办，还是先学习吧</p>
+<p>简单用一个Demo过一下基本的使用吧！</p>
+<p>main.ts</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createApp &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">App</span> <span class="keyword">from</span> <span class="string">&#x27;./App.vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="title function_">createApp</span>(<span class="title class_">App</span>).<span class="title function_">mount</span>(<span class="string">&#x27;#app&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>App.vue</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">RefDemo</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">hr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">hr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">ReactiveDemo</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">hr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">hr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">ToDemo</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> <span class="title class_">ReactiveDemo</span> <span class="keyword">from</span> <span class="string">&#x27;./components/reactiveDemo.vue&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> <span class="title class_">RefDemo</span> <span class="keyword">from</span> <span class="string">&#x27;./components/refDemo.vue&#x27;</span></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> <span class="title class_">ToDemo</span> <span class="keyword">from</span> <span class="string">&#x27;./components/toDemo.vue&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span>&#x27;</span><br></pre></td></tr></table></figure>
+
+<h1 id="Ref相关"><a href="#Ref相关" class="headerlink" title="Ref相关"></a>Ref相关</h1><p>refDemo.vue</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">lang</span>=<span class="string">&quot;css&quot;</span> <span class="attr">scoped</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css"><span class="selector-class">.alive</span> &#123;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">color</span>: greenyellow;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"></span></span><br><span class="line"><span class="language-css"><span class="selector-class">.dead</span> &#123;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">color</span>: red;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    &#123;&#123; Kevin &#125;&#125;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    &#123;&#123; Elysia &#125;&#125;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">hr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    &#123;&#123; Mobius &#125;&#125;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">hr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;Omega&quot;</span>&gt;</span>Omega Befalling<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">hr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;Alpha&quot;</span>&gt;</span>Restarting new era<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">hr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;toggle&quot;</span>&gt;</span>Toggle Kevin<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; ref, customRef, shallowRef, <span class="title class_">Ref</span>, triggerRef &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">interface <span class="title class_">Hero</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">name</span>: string</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">power</span>: string</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">weapon</span>: string</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">rank</span>: number</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">state</span>: string</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title class_">Kevin</span>: <span class="title class_">Ref</span>&lt;<span class="title class_">Hero</span>&gt; = <span class="title function_">shallowRef</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">name</span>: <span class="string">&#x27;Kevin&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">power</span>: <span class="string">&#x27;Ice&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">weapon</span>: <span class="string">&#x27;God Fire&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">rank</span>: <span class="number">1</span>,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">state</span>: <span class="string">&#x27;Alive&#x27;</span></span></span><br><span class="line"><span class="language-javascript">&#125;)</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title class_">Elysia</span>: <span class="title class_">Ref</span>&lt;<span class="title class_">Hero</span>&gt; = <span class="title function_">ref</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">name</span>: <span class="string">&#x27;Elysia&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">power</span>: <span class="string">&#x27;Crystal&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">weapon</span>: <span class="string">&#x27;Key of Humanity&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">rank</span>: <span class="number">2</span>,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">state</span>: <span class="string">&#x27;Alive&#x27;</span></span></span><br><span class="line"><span class="language-javascript">&#125;)</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title class_">Mobius</span>: <span class="title class_">Ref</span>&lt;<span class="title class_">Hero</span>&gt; = <span class="title function_">ref</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">name</span>: <span class="string">&#x27;Mobius&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">power</span>: <span class="string">&#x27;Snake&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">weapon</span>: <span class="string">&#x27;Shadow of passed world&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">rank</span>: <span class="number">10</span>,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">state</span>: <span class="string">&#x27;Alive&#x27;</span></span></span><br><span class="line"><span class="language-javascript">&#125;)</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">function</span> <span class="title function_">Omega</span>(<span class="params"></span>): <span class="keyword">void</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="title class_">Elysia</span>.<span class="property">value</span>.<span class="property">state</span> = <span class="string">&#x27;Dead&#x27;</span></span></span><br><span class="line"><span class="language-javascript">  <span class="title class_">Mobius</span>.<span class="property">value</span>.<span class="property">state</span> = <span class="string">&#x27;Dead&#x27;</span></span></span><br><span class="line"><span class="language-javascript">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;我什么都做不到&#x27;</span>)</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">function</span> <span class="title function_">Alpha</span>(<span class="params"></span>): <span class="keyword">void</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="title class_">Kevin</span>.<span class="property">value</span>.<span class="property">state</span> = <span class="string">&#x27;Missing&#x27;</span></span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// 这里不要使用下面的句子，ref和shallowRef混用会导致浅层响应式失效</span></span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// Mobius.value.state = &#x27;Missing&#x27;</span></span></span><br><span class="line"><span class="language-javascript">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;人类，一定会战胜崩坏&#x27;</span>)</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">function</span> <span class="title function_">toggle</span>(<span class="params"></span>): <span class="keyword">void</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="title class_">Kevin</span>.<span class="property">value</span>.<span class="property">state</span> = <span class="title class_">Kevin</span>.<span class="property">value</span>.<span class="property">state</span> === <span class="string">&#x27;Alive&#x27;</span> ? <span class="string">&#x27;Missing&#x27;</span> : <span class="string">&#x27;Alive&#x27;</span></span></span><br><span class="line"><span class="language-javascript">  <span class="title function_">triggerRef</span>(<span class="title class_">Kevin</span>)</span></span><br><span class="line"><span class="language-javascript">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Kevin triggered&#x27;</span>)</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// 下面演示一下自定义Ref（customRef）的用法</span></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">function</span> <span class="title class_">MyRef</span>&lt;T&gt;(<span class="attr">value</span>: T) &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">return</span> <span class="title function_">customRef</span>(<span class="function">(<span class="params">tracker, trigger</span>) =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="title function_">get</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="title function_">tracker</span>()</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">return</span> value</span></span><br><span class="line"><span class="language-javascript">      &#125;,</span></span><br><span class="line"><span class="language-javascript">      <span class="title function_">set</span>(<span class="params">newValue: T</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">        value = newValue</span></span><br><span class="line"><span class="language-javascript">        <span class="title function_">trigger</span>()</span></span><br><span class="line"><span class="language-javascript">      &#125;</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;)</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title class_">Kiana</span> = <span class="title class_">MyRef</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">name</span>: <span class="string">&#x27;Kiana&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">power</span>: <span class="string">&#x27;x&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">weapon</span>: <span class="string">&#x27;y&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">state</span>: <span class="string">&#x27;Alive&#x27;</span></span></span><br><span class="line"><span class="language-javascript">&#125;)</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="PS"><a href="#PS" class="headerlink" title="PS:"></a>PS:</h2><p>shallowRef和Ref不要混用，Ref在重新更新渲染的时候，会导致shallowRef的渲染也被更新，shallow属性就失效了</p>
+<h1 id="Reactive相关"><a href="#Reactive相关" class="headerlink" title="Reactive相关"></a>Reactive相关</h1><p>reactiveDemo.vue</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">lang</span>=<span class="string">&quot;css&quot;</span> <span class="attr">scoped</span>&gt;</span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span> <span class="attr">v-for</span>=<span class="string">&quot;item in list.arr&quot;</span>&gt;</span>&#123;&#123; item &#125;&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click.prevent</span>=<span class="string">&quot;add&quot;</span>&gt;</span>add<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">hr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;show&quot;</span>&gt;</span>Show Numbers<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; ref, reactive, readonly &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">let</span> list = reactive&lt;&#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">arr</span>: string[]</span></span><br><span class="line"><span class="language-javascript">&#125;&gt;(&#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">arr</span>: []</span></span><br><span class="line"><span class="language-javascript">&#125;)</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">let</span> numList = reactive&lt;&#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">element</span>: number[]</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">otherElement</span>: string[]</span></span><br><span class="line"><span class="language-javascript">&#125;&gt;(&#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">element</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">otherElement</span>: [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>]</span></span><br><span class="line"><span class="language-javascript">&#125;)</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> readonlyNumList = <span class="title function_">readonly</span>(numList)</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title function_">add</span> = (<span class="params"></span>) =&gt; &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">let</span> res = [<span class="string">&#x27;grape&#x27;</span>, <span class="string">&#x27;mango&#x27;</span>, <span class="string">&#x27;strawberry&#x27;</span>]</span></span><br><span class="line"><span class="language-javascript">        list.<span class="property">arr</span> = res</span></span><br><span class="line"><span class="language-javascript">        <span class="variable language_">console</span>.<span class="title function_">log</span>(list)</span></span><br><span class="line"><span class="language-javascript">    &#125;, <span class="number">2000</span>)</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title function_">show</span> = (<span class="params"></span>) =&gt; &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="variable language_">console</span>.<span class="title function_">log</span>(numList.<span class="property">element</span>, readonlyNumList.<span class="property">element</span>)</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="PS-1"><a href="#PS-1" class="headerlink" title="PS:"></a>PS:</h2><p>readonly只能用在reactive数据上</p>
+<p>调试可以发现，这个readonly的机制和响应式类似，都是使用proxy来进行</p>
+<h1 id="toRef相关"><a href="#toRef相关" class="headerlink" title="toRef相关"></a>toRef相关</h1><p>toDemo.vue</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">        &#123;&#123; furrymonster &#125;&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">hr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">        toRef:&#123;&#123; fav &#125;&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">hr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;change&quot;</span>&gt;</span>Change<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; toRef, reactive, toRefs, toRaw &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> furrymonster = <span class="title function_">reactive</span>(&#123; <span class="attr">name</span>: <span class="string">&#x27;FurryMonster&#x27;</span>, <span class="attr">age</span>: <span class="string">&#x27;20&#x27;</span>, <span class="attr">fav</span>: <span class="string">&#x27;jerk off&#x27;</span> &#125;)</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> fav = <span class="title function_">toRef</span>(furrymonster, <span class="string">&#x27;fav&#x27;</span>)</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title function_">change</span> = (<span class="params"></span>) =&gt; &#123;</span></span><br><span class="line"><span class="language-javascript">    furrymonster.<span class="property">fav</span> = <span class="string">&#x27;eat&#x27;</span></span></span><br><span class="line"><span class="language-javascript">    <span class="variable language_">console</span>.<span class="title function_">log</span>(furrymonster)</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">lang</span>=<span class="string">&quot;css&quot;</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">* &#123;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">padding</span>: <span class="number">0</span>;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">margin</span>: <span class="number">0</span>;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="PS-2"><a href="#PS-2" class="headerlink" title="PS:"></a>PS:</h2><p>toRef和toRaw都是基于reactive的，对于普通的对象，这两个函数不会发挥任何作用</p>
+<p>从这里也不难发现，Vue3的ref基于reactive，reactive基于对普通数据（raw data）的proxy代理，它们之间是一个相互依赖的关系</p>
+<h1 id="响应式原理"><a href="#响应式原理" class="headerlink" title="响应式原理"></a>响应式原理</h1><p>Vue2 使用的是 Object.defineProperty  <a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=Vue3&spm=1001.2101.3001.7020">Vue3</a> 使用的是 Proxy</p>
+<h4 id="reactive和effect的实现"><a href="#reactive和effect的实现" class="headerlink" title="reactive和effect的实现"></a>reactive和effect的实现</h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> reactive = &lt;T <span class="keyword">extends</span> <span class="built_in">object</span>&gt;<span class="function">(<span class="params"><span class="attr">target</span>:T</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Proxy</span>(target,&#123;</span><br><span class="line">        <span class="title function_">get</span> (target,key,receiver) &#123;</span><br><span class="line">          <span class="keyword">const</span> res  = <span class="title class_">Reflect</span>.<span class="title function_">get</span>(target,key,receiver) <span class="keyword">as</span> <span class="built_in">object</span></span><br><span class="line"> </span><br><span class="line">          <span class="keyword">return</span> res</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="title function_">set</span> (target,key,value,receiver) &#123;</span><br><span class="line">           <span class="keyword">const</span> res = <span class="title class_">Reflect</span>.<span class="title function_">set</span>(target,key,value,receiver)</span><br><span class="line"> </span><br><span class="line">           <span class="keyword">return</span> res</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Vue3 的响应式原理依赖了 Proxy 这个核心 API，通过 Proxy 可以劫持对象的某些操作。</p>
+<h4 id="effect-track-trigger"><a href="#effect-track-trigger" class="headerlink" title="effect track trigger"></a>effect track trigger</h4><p>实现effect 副作用函数</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> activeEffect;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="title function_">effect</span> = (<span class="params"><span class="attr">fn</span>:<span class="title class_">Function</span></span>) =&gt; &#123;</span><br><span class="line">     <span class="keyword">const</span> _effect = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        activeEffect = _effect;</span><br><span class="line">        <span class="title function_">fn</span>()</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="title function_">_effect</span>()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用一个全局变量 active 收集当前副作用函数，并且初始化的时候调用一下</p>
+<p>实现track</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> targetMap = <span class="keyword">new</span> <span class="title class_">WeakMap</span>()</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="title function_">track</span> = (<span class="params">target,key</span>) =&gt;&#123;</span><br><span class="line">   <span class="keyword">let</span> depsMap = targetMap.<span class="title function_">get</span>(target)</span><br><span class="line">   <span class="keyword">if</span>(!depsMap)&#123;</span><br><span class="line">       depsMap = <span class="keyword">new</span> <span class="title class_">Map</span>()</span><br><span class="line">       targetMap.<span class="title function_">set</span>(target,depsMap)</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">let</span> deps = depsMap.<span class="title function_">get</span>(key)</span><br><span class="line">   <span class="keyword">if</span>(!deps)&#123;</span><br><span class="line">      deps = <span class="keyword">new</span> <span class="title class_">Set</span>()</span><br><span class="line">      depsMap.<span class="title function_">set</span>(key,deps)</span><br><span class="line">   &#125;</span><br><span class="line"> </span><br><span class="line">   deps.<span class="title function_">add</span>(activeEffect)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行完成成后我们得到一个如下的数据结构</p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/37cb1779ae1ca34629f5614eccabc2e5.png" alt="img"></p>
+<p>实现trigger</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="title function_">trigger</span> = (<span class="params">target,key</span>) =&gt; &#123;</span><br><span class="line">   <span class="keyword">const</span> depsMap = targetMap.<span class="title function_">get</span>(target)</span><br><span class="line">   <span class="keyword">const</span> deps = depsMap.<span class="title function_">get</span>(key)</span><br><span class="line">   deps.<span class="title function_">forEach</span>(<span class="function"><span class="params">effect</span>=&gt;</span><span class="title function_">effect</span>())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当我们进行赋值的时候会调用 set 然后 触发收集的副作用函数</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;track,trigger&#125; <span class="keyword">from</span> <span class="string">&#x27;./effect&#x27;</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> reactive = &lt;T <span class="keyword">extends</span> <span class="built_in">object</span>&gt;<span class="function">(<span class="params"><span class="attr">target</span>:T</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Proxy</span>(target,&#123;</span><br><span class="line">        <span class="title function_">get</span> (target,key,receiver) &#123;</span><br><span class="line">          <span class="keyword">const</span> res  = <span class="title class_">Reflect</span>.<span class="title function_">get</span>(target,key,receiver) <span class="keyword">as</span> <span class="built_in">object</span></span><br><span class="line"> </span><br><span class="line">          <span class="title function_">track</span>(target,key)</span><br><span class="line"> </span><br><span class="line">          <span class="keyword">return</span> res</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="title function_">set</span> (target,key,value,receiver) &#123;</span><br><span class="line">           <span class="keyword">const</span> res = <span class="title class_">Reflect</span>.<span class="title function_">set</span>(target,key,value,receiver)</span><br><span class="line"> </span><br><span class="line">           <span class="title function_">trigger</span>(target,key)</span><br><span class="line"> </span><br><span class="line">           <span class="keyword">return</span> res</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>给 reactive 添加这两个方法</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"> </span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;X-UA-Compatible&quot;</span> <span class="attr">content</span>=<span class="string">&quot;IE=edge&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"> </span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"> </span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line"> </span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"> </span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">import</span> &#123; reactive &#125; <span class="keyword">from</span> <span class="string">&#x27;./reactive.js&#x27;</span></span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">import</span> &#123; effect &#125; <span class="keyword">from</span> <span class="string">&#x27;./effect.js&#x27;</span></span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">const</span> user = <span class="title function_">reactive</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">name</span>: <span class="string">&quot;小满&quot;</span>,</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">age</span>: <span class="number">18</span></span></span><br><span class="line"><span class="language-javascript">        &#125;)</span></span><br><span class="line"><span class="language-javascript">        <span class="title function_">effect</span>(<span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;#app&#x27;</span>).<span class="property">innerText</span> = <span class="string">`<span class="subst">$&#123;user.name&#125;</span> - <span class="subst">$&#123;user.age&#125;</span>`</span></span></span><br><span class="line"><span class="language-javascript">        &#125;)</span></span><br><span class="line"><span class="language-javascript"> </span></span><br><span class="line"><span class="language-javascript">        <span class="built_in">setTimeout</span>(<span class="function">()=&gt;</span>&#123;</span></span><br><span class="line"><span class="language-javascript">            user.<span class="property">name</span> = <span class="string">&#x27;大满很吊&#x27;</span></span></span><br><span class="line"><span class="language-javascript">            <span class="built_in">setTimeout</span>(<span class="function">()=&gt;</span>&#123;</span></span><br><span class="line"><span class="language-javascript">                user.<span class="property">age</span> = <span class="string">&#x27;23&#x27;</span></span></span><br><span class="line"><span class="language-javascript">            &#125;,<span class="number">1000</span>)</span></span><br><span class="line"><span class="language-javascript">        &#125;,<span class="number">2000</span>)</span></span><br><span class="line"><span class="language-javascript"> </span></span><br><span class="line"><span class="language-javascript">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"> </span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="递归实现reactive"><a href="#递归实现reactive" class="headerlink" title="递归实现reactive"></a>递归实现reactive</h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; track, trigger &#125; <span class="keyword">from</span> <span class="string">&#x27;./effect&#x27;</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> <span class="title function_">isObject</span> = (<span class="params">target</span>) =&gt; target != <span class="literal">null</span> &amp;&amp; <span class="keyword">typeof</span> target == <span class="string">&#x27;object&#x27;</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> reactive = &lt;T <span class="keyword">extends</span> <span class="built_in">object</span>&gt;<span class="function">(<span class="params"><span class="attr">target</span>: T</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Proxy</span>(target, &#123;</span><br><span class="line">        <span class="title function_">get</span>(<span class="params">target, key, receiver</span>) &#123;</span><br><span class="line">            <span class="keyword">const</span> res = <span class="title class_">Reflect</span>.<span class="title function_">get</span>(target, key, receiver) <span class="keyword">as</span> <span class="built_in">object</span></span><br><span class="line"> </span><br><span class="line">            <span class="title function_">track</span>(target, key)</span><br><span class="line"> </span><br><span class="line">            <span class="keyword">if</span> (<span class="title function_">isObject</span>(res)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="title function_">reactive</span>(res)</span><br><span class="line">            &#125;</span><br><span class="line"> </span><br><span class="line">            <span class="keyword">return</span> res</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="title function_">set</span>(<span class="params">target, key, value, receiver</span>) &#123;</span><br><span class="line">            <span class="keyword">const</span> res = <span class="title class_">Reflect</span>.<span class="title function_">set</span>(target, key, value, receiver)</span><br><span class="line"> </span><br><span class="line">            <span class="title function_">trigger</span>(target, key)</span><br><span class="line"> </span><br><span class="line">            <span class="keyword">return</span> res</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by FurryMonster, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/前端/" class="tag">#前端</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2024/10/10/Unity%E6%89%8B%E5%8A%A8%E6%B7%B7%E5%90%88Animator%E5%8A%A8%E7%94%BB/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">Unity手动混合Animator动画</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2024/10/08/DevOps/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">DevOps</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/resume" class="item">Resume</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Projects</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/Furry-Monster/YouOnlyLockOncev1.0" class="item">YouOnlyLockOnce</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/Furry-Monster" class="item">GitHub</a>
+                
+                <a href="" class="item">CodePen</a>
+                
+                <a href="" class="item">Patreon</a>
+                
+                <a href="" class="item">Mastodon</a>
+                
+                <a href="" class="item">Discord</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 FurryMonster<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>
