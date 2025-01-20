@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Unity的InputSystem三种Behavior - Furry Monster的博客</title>
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Unity的InputSystem三种Behavior - Furry Monster的博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="http://furry-monster.github.io/2025/01/20/Unity%E7%9A%84InputSystem%E4%B8%89%E7%A7%8DBehavior/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2025-01-20T08:28:41.000Z" />
+  
+  <meta property="og:article:author" content="FurryMonster" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+    <body
+        data-color-scheme="dark"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/Furry-Monster" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-codepen nav-item-icon" href="https://codepen.io/Alvin-Young-FurryMonster" target="_blank" aria-label="CodePen">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-patreon nav-item-icon" href="/patreon.com/FurryMonster" target="_blank" aria-label="Patreon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-mastodon nav-item-icon" href="/" target="_blank" aria-label="Mastodon">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-discord nav-item-icon" href="https://discordapp.com/users/1314183151353987094" target="_blank" aria-label="Discord">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+
+        
+        <div class="date" id="date">
+            <span>January</span>
+            <span>20,</span>
+            <span>2025</span>
+        </div>
+        
+
+        <h1 class="title">Unity的InputSystem三种Behavior</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <h1 id="三类Behavior辨析"><a href="#三类Behavior辨析" class="headerlink" title="三类Behavior辨析"></a>三类Behavior辨析</h1><h2 id="Send-Broadcast-Messages"><a href="#Send-Broadcast-Messages" class="headerlink" title="Send &#x2F; Broadcast Messages"></a>Send &#x2F; Broadcast Messages</h2><p>PlayerInput.cs类内部使用GameObject.SendMessage()或者GameObject.BroadcastMessage()方法，本质都是使用反射方式实现方法调用的。</p>
+<ul>
+<li>这两种Behavior采用约定的方式，当某Action触发时，自动查找当前PlayerInput所属GameObject的 “ On+对应action名 “ 方法，进行方法调用。所以使用时，遵循这种约定，添加 “ On+对应action名 “ 的方法即可。</li>
+<li>Broadcast Messages 与Send Message的区别就是Broadcast 除了当前GameObject，还会查找所有子对象是否有对应方法，会一并调用。</li>
+<li>这种约定的方法名是PlayerInput初始化时进行缓存的：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">void CacheMessageNames()</span><br><span class="line">&#123;</span><br><span class="line">    if (m_Actions == null)</span><br><span class="line">        return;</span><br><span class="line">    if (m_ActionMessageNames != null)</span><br><span class="line">        m_ActionMessageNames.Clear();</span><br><span class="line">    else m_ActionMessageNames = new Dictionary&lt;string, string&gt;();</span><br><span class="line">    foreach (var action in m_Actions)</span><br><span class="line">    &#123;</span><br><span class="line">        action.MakeSureIdIsInPlace();</span><br><span class="line">        var name = CSharpCodeHelpers.MakeTypeName(action.name);</span><br><span class="line">        m_ActionMessageNames[action.m_Id] = &quot;On&quot; + name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>特别注意：</strong></p>
+<ol>
+<li><p>Send&#x2F;Broadcast Messages方式，目前只处理performed或者type为value的canceled的回调，所以对于这两种方式，Button类型Action的按键释放通知是不处理的。</p>
+</li>
+<li><p>反射对方法名大小写敏感，方法大小写不匹配时方法不触发，但不报异常</p>
+<blockquote>
+<p>action name在上面cacheName 时首字母会转成大写，所以写方法时注意，比如action叫fireCube，但方法要写成OnFireCube，写成OnfireCube或者OnFirecube都是无法触发的</p>
+</blockquote>
+</li>
+<li><p>方法可以带InputValue参数，但无参和有参同时存在只会调用首先声明的那一个</p>
+<blockquote>
+<p>如果方法名正确，但带错参数会报MissingMethodException，比如你像另两个behavior一样带CallbackContext是不行的。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//哪个写在前面调用谁</span><br><span class="line">public void OnFireCube(InputValue value)</span><br><span class="line">&#123;</span><br><span class="line">    Debug.Log(&quot;父对象触发fire action，value=&quot; + value.Get&lt;float&gt;());</span><br><span class="line">&#125;</span><br><span class="line">public void OnFireCube()</span><br><span class="line">&#123;</span><br><span class="line">    Debug.Log(&quot;父对象触发fire action&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="Invoke-CSharp-Events"><a href="#Invoke-CSharp-Events" class="headerlink" title="Invoke CSharp Events"></a>Invoke CSharp Events</h2><p>使用原生c#事件方式，利用PlayerInput.onActionTriggered事件间接监听action事件触发：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">private void Start()</span><br><span class="line">&#123;</span><br><span class="line">    var playerInput = GetComponent&lt;PlayerInput&gt;();</span><br><span class="line">    playerInput.onActionTriggered += context =&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        switch (context.action.name)</span><br><span class="line">        &#123;</span><br><span class="line">            case &quot;fireCube&quot;:</span><br><span class="line">                OnFire(context);</span><br><span class="line">                break;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line">public void OnFire(InputAction.CallbackContext context)</span><br><span class="line">&#123;</span><br><span class="line">    switch (context.phase)</span><br><span class="line">    &#123;</span><br><span class="line">        case InputActionPhase.Performed:</span><br><span class="line">            Debug.Log(&quot;c#Event performed:value=&quot;+context.ReadValue&lt;float&gt;());</span><br><span class="line">            break;</span><br><span class="line">        case InputActionPhase.Canceled:</span><br><span class="line">            Debug.Log(&quot;c#Event canceled:value=&quot;+context.ReadValue&lt;float&gt;());</span><br><span class="line">            break;</span><br><span class="line">        case InputActionPhase.Started:</span><br><span class="line">            Debug.Log(&quot;c#Event start:value=&quot;+context.ReadValue&lt;float&gt;());</span><br><span class="line">            break;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>当然你也可以不用PlayerInput的事件，直接用InputSystem、ActionMap或者Action注册回调。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">class MyPlayerInputScript : MonoBehaviour</span><br><span class="line">&#123;</span><br><span class="line">    private void Awake()</span><br><span class="line">    &#123;</span><br><span class="line">        // 需要访问PlayerInput组件和相关的Action</span><br><span class="line">        PlayerInput playerInput = GetComponent&lt;PlayerInput&gt;();</span><br><span class="line">        InputAction hit = playerInput.actions[&quot;Fire&quot;];</span><br><span class="line">        // 手动注册回调函数</span><br><span class="line">        hit.started += OnFireStarted;</span><br><span class="line">        hit.performed += OnFirePerformed;</span><br><span class="line">        hit.canceled += OnFireCanceled;</span><br><span class="line">    &#125;</span><br><span class="line">    void OnFireStarted(InputAction.CallbackContext context)</span><br><span class="line">    &#123;</span><br><span class="line">        var v = context.ReadValue&lt;float&gt;();</span><br><span class="line">        Debug.Log(string.Format(&quot;Fire Started:&#123;0&#125;&quot;, v));</span><br><span class="line">    &#125;</span><br><span class="line">    void OnFirePerformed(InputAction.CallbackContext context)</span><br><span class="line">    &#123;</span><br><span class="line">        var v = context.ReadValue&lt;float&gt;();</span><br><span class="line">        Debug.Log(string.Format(&quot;Fire Performed:&#123;0&#125;&quot;, v));</span><br><span class="line">    &#125;</span><br><span class="line">    void OnFireCanceled(InputAction.CallbackContext context)</span><br><span class="line">    &#123;</span><br><span class="line">        var v = context.ReadValue&lt;float&gt;();</span><br><span class="line">        Debug.Log(string.Format(&quot;Fire Canceled:&#123;0&#125;&quot;, v));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="Invoke-Unity-Events-⭐"><a href="#Invoke-Unity-Events-⭐" class="headerlink" title="Invoke Unity Events ⭐"></a>Invoke Unity Events ⭐</h2><p>Invoke Unity Event方式，和原生c#逻辑是类似的，只不过是用UI操作代替code罢了。因为需要UI操作，所以用了Unity Event，在PlayerInput组件引入ActionEvent[] m_ActionEvents即可，Inspector中就会多出Events列表，对ActionAsset中每个action都可以注册一个回调方法，注册的方法是</p>
+<ol>
+<li>前一个候选框选择方法所在的对象（或对象上的任意组件，不能单是脚本！）</li>
+<li>选择方法所在的脚本，并选择此方法<blockquote>
+<p>这种behavior的回调方法也可以带CallbackContext参数，使用和c#event相同：</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public void OnFire(InputAction.CallbackContext context)</span><br><span class="line">&#123;</span><br><span class="line">    if(context.phase == InputActionPhase.Performed)</span><br><span class="line">    &#123;</span><br><span class="line">      Debug.Log(&quot;c#Event performed:value=&quot;+context.ReadValue&lt;float&gt;());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="三类消息通知方式比较"><a href="#三类消息通知方式比较" class="headerlink" title="三类消息通知方式比较"></a>三类消息通知方式比较</h2><ul>
+<li><p>sendMessage &#x2F; boardcast<br>这种方式虽然使用简单，但需要搜索一个潜在的庞大组件列表，以找到那些包含匹配方法的组件，这引入了大量的开销。更糟糕的是，由于它们使用字符串作为方法名称，因此它们使用反射来标识匹配的方法。在这种情况下，反射是在运行时与类型系统交互和修改类型系统的能力，但通过反射调用方法比以正常方式调用方法慢。如果你使用一次或两次反射，这很好，但如果你经常使用，那么这些小的性能影响就会加起来。不仅如此，由于所有这些都发生在运行时，因此根本没有编译时错误检查。这使得方法名称中的拼写错误等小错误更容易需要很长时间才能调试。</p>
+</li>
+<li><p>PlayerInput的输入触发通知的本质就是给Action的三个事件performed、canceled、started注册回调，只不过差别在，C#Event需要手动通过代码方式注册，而sendMessage 用的约定、UnityEvent用的UI绑定默认注册罢了。</p>
+</li>
+</ul>
+<blockquote>
+<p>总的来说：sendMessage 最方便，但性能最差、灵活性不佳；UnityEvent最直观，性能一般；C#Event 最灵活、性能最好，但操作稍麻烦。根据需要选择适合的Behavior。</p>
+</blockquote>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by FurryMonster, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Unity/" class="tag">#Unity</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        <a class="next"></a>
+        
+        <a href="/2024/11/16/%E6%B5%85%E6%9E%90%E5%9B%BE%E5%BD%A2%E6%B8%B2%E6%9F%93%E7%A9%BA%E9%97%B4/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">浅析图形渲染空间</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/resume" class="item">Resume</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Projects</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/Furry-Monster/YouOnlyLockOncev1.0" class="item">YouOnlyLockOnce</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/Furry-Monster" class="item">GitHub</a>
+                
+                <a href="" class="item">CodePen</a>
+                
+                <a href="" class="item">Patreon</a>
+                
+                <a href="" class="item">Mastodon</a>
+                
+                <a href="" class="item">Discord</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 FurryMonster<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>
